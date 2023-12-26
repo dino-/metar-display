@@ -76,6 +76,7 @@ executable pbmetar
       base >=3 && <5
     , curl
     , pbmetar
+    , regex-compat
 
 -- test-suite basic-wrk-test-suite
 --   import: lang
