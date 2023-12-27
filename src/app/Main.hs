@@ -3,6 +3,7 @@ import System.IO (hPutStrLn, stderr)
 import Text.Printf (printf)
 
 import PbMetar.Curl (getMetar)
+import PbMetar.Math
 import PbMetar.Metar (parse)
 import PbMetar.Types
 
@@ -29,21 +30,3 @@ exitFail :: String -> IO ()
 exitFail errorInfo = do
   hPutStrLn stderr $ printf "Error: %s" errorInfo
   exitFailure
-
-
-celsiusToFahrenheit :: TempCelsius -> TempFahr
-celsiusToFahrenheit (TempCelsius tempCelsius) = TempFahr $ tempCelsius * (9 / 5) + 32.0
-
-
-fahrenheitToCelsius :: TempFahr -> TempCelsius
-fahrenheitToCelsius (TempFahr tempFahr) = TempCelsius $ (tempFahr - 32) * (5 / 9)
-
-
-knotsToMph :: WindKts -> WindMph
-knotsToMph (WindKts knots) = WindMph $ knots * 6076 / 5280
-
-
-calculateWindChill :: WindMph -> TempFahr -> TempFahr
-calculateWindChill (WindMph wind) (TempFahr tempF) = TempFahr $
-  34.74 + (0.6215 * tempF) - (35.75 * (wind ** exp')) + (0.4275 * tempF * (wind ** exp'))
-  where exp' = 0.16 :: Double

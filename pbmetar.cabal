@@ -58,6 +58,7 @@ library
   import: lang
   exposed-modules:
     PbMetar.Curl
+    PbMetar.Math
     PbMetar.Metar
     PbMetar.Types
   -- other-modules:
