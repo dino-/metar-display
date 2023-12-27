@@ -57,6 +57,7 @@ common lang
 library
   import: lang
   exposed-modules:
+    PbMetar.Metar
     PbMetar.Types
   -- other-modules:
   --     Paths_fixme
@@ -64,6 +65,7 @@ library
     src/lib
   build-depends:
       base >=3 && <5
+    , regex-compat
 
 executable pbmetar
   import: lang
@@ -76,7 +78,6 @@ executable pbmetar
       base >=3 && <5
     , curl
     , pbmetar
-    , regex-compat
 
 -- test-suite basic-wrk-test-suite
 --   import: lang
