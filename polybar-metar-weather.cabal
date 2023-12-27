@@ -60,10 +60,10 @@ common lang
 library
   import: lang
   exposed-modules:
+    PbMetar.Common
     PbMetar.Curl
     PbMetar.Math
     PbMetar.Metar
-    PbMetar.Types
   -- other-modules:
   --     Paths_fixme
   hs-source-dirs:

@@ -7,8 +7,8 @@ import Data.Time.LocalTime (TimeZone)
 import Text.Printf (printf)
 import Text.Regex (matchRegex, mkRegex)
 
+import PbMetar.Common
 import PbMetar.Math (computeLocalTime)
-import PbMetar.Types
 
 
 -- KRDU 261451Z 09008KT 10SM FEW070 BKN095 BKN110 OVC250 14/08 A3019 RMK AO2 SLP220 T01390083 53003

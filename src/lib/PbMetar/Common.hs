@@ -1,4 +1,4 @@
-module PbMetar.Types
+module PbMetar.Common
   where
 
 import Data.Time.LocalTime (TimeOfDay (..))

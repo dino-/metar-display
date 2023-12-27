@@ -3,10 +3,10 @@ import System.Exit (exitFailure, exitSuccess)
 import System.IO (hPutStrLn, stderr)
 import Text.Printf (printf)
 
+import PbMetar.Common
 import PbMetar.Curl (getMetar)
 import PbMetar.Math
 import PbMetar.Metar (parse)
-import PbMetar.Types
 
 
 main :: IO ()

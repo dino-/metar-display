@@ -3,7 +3,7 @@ module PbMetar.Math
 
 import Data.Time.LocalTime (TimeOfDay (..), TimeZone, utcToLocalTimeOfDay)
 
-import PbMetar.Types
+import PbMetar.Common
 
 
 celsiusToFahrenheit :: TempCelsius -> TempFahr
