@@ -57,7 +57,7 @@ common lang
 library
   import: lang
   exposed-modules:
-      Example
+    PbMetar.Types
   -- other-modules:
   --     Paths_fixme
   hs-source-dirs:
