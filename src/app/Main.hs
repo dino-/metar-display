@@ -1,27 +1,17 @@
--- import Debug.Trace (traceM)
-import Network.Curl (CurlCode (CurlOK), curlGetString)
 import System.Exit (exitFailure, exitSuccess)
 import System.IO (hPutStrLn, stderr)
 import Text.Printf (printf)
 
+import PbMetar.Curl (getMetar)
 import PbMetar.Metar (parse)
 import PbMetar.Types
 
 
 main :: IO ()
 main = do
-  let urlPrefix = "ftp://tgftp.nws.noaa.gov/data/observations/metar/stations" :: String
-  let station = "KRDU" :: String
-  let url = printf "%s/%s.TXT" urlPrefix station
-  result <- resultToEither <$> curlGetString url []
-  -- traceM . show $ result
-  let parsed = parse =<< result
+  curlResult <- getMetar
+  let parsed = parse =<< curlResult
   either exitFail exitOk parsed
-
-
-resultToEither :: (CurlCode, String) -> Either String String
-resultToEither (CurlOK, responseBody) = Right responseBody
-resultToEither (curlCode, _) = Left . show $ curlCode
 
 
 exitOk :: Metar -> IO ()
