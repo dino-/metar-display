@@ -1,9 +1,10 @@
 cabal-version: 2.2
 
-name: pbmetar
+name: polybar-metar-weather
 version: 1.0
--- synopsis:
--- description:
+synopsis: Retrieve and parse METAR weather for Polybar
+description: A utility to retrieve METAR weather info, parse it and construct
+  monitor output for polybar. Uses FontAwesome glyphs.
 author: Dino Morelli
 maintainer: dino@ui3.info
 copyright: 2023 Dino Morelli
@@ -19,7 +20,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/dino-/pbmetar
+  location: https://github.com/dino-/polybar-metar-weather
 
 common lang
   default-language: Haskell2010
@@ -70,7 +71,7 @@ library
     , curl
     , regex-compat
 
-executable pbmetar
+executable polybar-metar-weather
   import: lang
   main-is: Main.hs
   -- other-modules:
@@ -79,7 +80,7 @@ executable pbmetar
     src/app
   build-depends:
       base >=3 && <5
-    , pbmetar
+    , polybar-metar-weather
 
 -- test-suite basic-wrk-test-suite
 --   import: lang
