@@ -19,7 +19,7 @@ parse s = do
   timeValues <- maybe (Left $ printf "Unable to parse time from: %s" metarString) Right parsedTime
   let time' = Time (read $ timeValues !! 0) (read $ timeValues !! 1)
 
-  let parsedWind = matchRegex (mkRegex ".* [0-9]{3}([0-9]{2})KT .*") metarString
+  let parsedWind = matchRegex (mkRegex ".* [0-9]{3}([0-9]{2,3})KT .*") metarString
   windValues <- maybe (Left $ printf "Unable to parse wind from: %s" metarString) Right parsedWind
   let wind' = WindKts . read $ windValues !! 0
 
