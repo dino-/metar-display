@@ -4,6 +4,16 @@ module PbMetar.Common
 import Data.Time.LocalTime (TimeOfDay (..))
 
 
+newtype Station = Station String
+
+-- newtype FontIndex = FontIndex Int
+
+data Options = Options
+  { optStation :: Station
+  -- , optStation :: FontIndex
+  }
+
+
 newtype WindKts = WindKts Double
   deriving Show
 

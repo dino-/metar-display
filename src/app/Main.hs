@@ -7,11 +7,13 @@ import PbMetar.Common
 import PbMetar.Curl (getMetar)
 import PbMetar.Math
 import PbMetar.Metar (parse)
+import PbMetar.Opts (parseOpts)
 
 
 main :: IO ()
 main = do
-  curlResult <- getMetar
+  opts <- parseOpts
+  curlResult <- getMetar $ optStation opts
   tz <- getCurrentTimeZone
   let parsed = parse tz =<< curlResult
   either exitFail exitOk parsed

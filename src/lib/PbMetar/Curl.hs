@@ -6,11 +6,12 @@ module PbMetar.Curl
 import Network.Curl (CurlCode (CurlOK), curlGetString)
 import Text.Printf (printf)
 
+import PbMetar.Common (Station (..))
 
-getMetar :: IO (Either String String)
-getMetar = do
+
+getMetar :: Station -> IO (Either String String)
+getMetar (Station station) = do
   let urlPrefix = "ftp://tgftp.nws.noaa.gov/data/observations/metar/stations" :: String
-  let station = "KRDU" :: String
   let url = printf "%s/%s.TXT" urlPrefix station
   resultToEither <$> curlGetString url []
 

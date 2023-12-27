@@ -64,8 +64,6 @@ library
     PbMetar.Curl
     PbMetar.Math
     PbMetar.Metar
-  -- other-modules:
-  --     Paths_fixme
   hs-source-dirs:
     src/lib
   build-depends:
@@ -76,13 +74,17 @@ library
 executable polybar-metar-weather
   import: lang
   main-is: Main.hs
-  -- other-modules:
-  --     Paths_fixme
+  other-modules:
+    Paths_polybar_metar_weather
+    PbMetar.Opts
   hs-source-dirs:
     src/app
   build-depends:
       base >=3 && <5
+    , heredoc
+    , optparse-applicative
     , polybar-metar-weather
+    , prettyprinter
 
 -- test-suite basic-wrk-test-suite
 --   import: lang
