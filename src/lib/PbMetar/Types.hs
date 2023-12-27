@@ -1,10 +1,8 @@
 module PbMetar.Types
   where
 
+import Data.Time.LocalTime (TimeOfDay (..))
 
--- Time values from METAR are UTC
-data Time = Time Int Int
-  deriving Show
 
 newtype WindKts = WindKts Double
   deriving Show
@@ -18,7 +16,7 @@ newtype TempCelsius = TempCelsius Double
 newtype TempFahr = TempFahr Double
 
 data Metar = Metar
-  { time :: Time
+  { time :: TimeOfDay
   , wind :: WindKts
   , temperature :: TempCelsius
   }

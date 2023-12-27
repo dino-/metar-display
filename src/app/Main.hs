@@ -1,3 +1,4 @@
+import Data.Time.LocalTime (TimeOfDay (..), getCurrentTimeZone)
 import System.Exit (exitFailure, exitSuccess)
 import System.IO (hPutStrLn, stderr)
 import Text.Printf (printf)
@@ -11,12 +12,13 @@ import PbMetar.Types
 main :: IO ()
 main = do
   curlResult <- getMetar
-  let parsed = parse =<< curlResult
+  tz <- getCurrentTimeZone
+  let parsed = parse tz =<< curlResult
   either exitFail exitOk parsed
 
 
 exitOk :: Metar -> IO ()
-exitOk (Metar (Time h m) windKts tc@(TempCelsius tempC)) = do
+exitOk (Metar (TimeOfDay h m _) windKts tc@(TempCelsius tempC)) = do
   let tempFahr@(TempFahr tempF) = celsiusToFahrenheit tc
   let windMph@(WindMph windM) = knotsToMph windKts
   let wcF@(TempFahr windChillF) = calculateWindChill windMph tempFahr

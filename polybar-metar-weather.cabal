@@ -54,6 +54,8 @@ common lang
     -Wincomplete-uni-patterns
     -Wpartial-fields
     -Wredundant-constraints
+  build-depends:
+      time
 
 library
   import: lang
