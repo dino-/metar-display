@@ -62,6 +62,7 @@ library
   exposed-modules:
     PbMetar.Common
     PbMetar.Curl
+    PbMetar.Log
     PbMetar.Math
     PbMetar.Metar
   hs-source-dirs:
@@ -69,6 +70,7 @@ library
   build-depends:
       base >=3 && <5
     , curl
+    , hslogger
     , regex-compat
 
 executable polybar-metar-weather

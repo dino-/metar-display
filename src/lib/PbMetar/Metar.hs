@@ -1,5 +1,6 @@
 module PbMetar.Metar
-  ( parse
+  ( isolateMetarLine
+  , parse
   )
   where
 
@@ -11,12 +12,14 @@ import PbMetar.Common
 import PbMetar.Math (computeLocalTime)
 
 
+isolateMetarLine :: String -> Either String String
+isolateMetarLine = Right . head . take 1 . drop 1 . lines
+
+
 -- KRDU 261451Z 09008KT 10SM FEW070 BKN095 BKN110 OVC250 14/08 A3019 RMK AO2 SLP220 T01390083 53003
 
 parse :: TimeZone -> String -> Either String Metar
-parse tz s = do
-  let metarString = head . take 1 . drop 1 . lines $ s
-
+parse tz metarString = do
   let parsedTime = matchRegex (mkRegex ".* [0-9]{2}([0-9]{2})([0-9]{2})Z .*") metarString
   time' <- maybe (Left $ printf "Unable to parse time from: %s" metarString) Right $ computeLocalTime tz =<< parsedTime
 
