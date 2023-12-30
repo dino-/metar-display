@@ -27,12 +27,18 @@ exitOk :: Metar -> IO ()
 exitOk (Metar (TimeOfDay h m _) windKts tc@(TempCelsius tempC)) = do
   let tempFahr@(TempFahr tempF) = celsiusToFahrenheit tc
   let windMph@(WindMph windM) = knotsToMph windKts
-  let wcF@(TempFahr windChillF) = calculateWindChill windMph tempFahr
-  let (TempCelsius windChillC) = fahrenheitToCelsius wcF
-  out $ printf "%%{T2}\xe586%%{T-} %02d:%02d %%{T2}\xf2c9%%{T-} %.0f°F %01f°C %%{T2}\xf72e%%{T-} %.1fmph %.0f°F %.1f°C"
-    h m tempF tempC windM windChillF windChillC
+  let windChillDisplay = mkWindChillDisplay $ calculateWindChill windMph tempFahr
+  out $ printf "%%{T2}\xe586%%{T-} %02d:%02d %%{T2}\xf2c9%%{T-} %.0f°F %01f°C %%{T2}\xf72e%%{T-} %.1fmph%s"
+    h m tempF tempC windM windChillDisplay
   infoM lname "polybar-metar-weather finished successfully"
   exitSuccess
+
+
+mkWindChillDisplay :: Maybe TempFahr -> String
+mkWindChillDisplay Nothing = ""
+mkWindChillDisplay (Just wcF@(TempFahr windChillF)) =
+  let (TempCelsius windChillC) = fahrenheitToCelsius wcF
+  in printf " %%{T2}\xf7ad%%{T-} %.0f°F %.1f°C" windChillF windChillC
 
 
 exitFail :: String -> IO ()
