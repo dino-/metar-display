@@ -5,6 +5,7 @@ module PbMetar.Opts
    )
    where
 
+import Data.Char (toUpper)
 import Data.Version (showVersion)
 import Options.Applicative
 import Paths_polybar_metar_weather (version)
@@ -27,7 +28,7 @@ parser = Options
         <> value 2
         )
       )
-  <*> ( Station <$> strArgument
+  <*> ( Station . map toUpper <$> strArgument
         (  metavar "STATION"
         <> help "Retrieve weather data for this station. See STATION below"
         )
