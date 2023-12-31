@@ -10,7 +10,7 @@ import Text.Printf (printf)
 import Text.Regex (matchRegex, mkRegex)
 
 import PbMetar.Common
-import PbMetar.Math (calculateWindChill, celsiusToFahrenheit, computeLocalTime, knotsToMph)
+import PbMetar.Math (calculateWindChill, celsiusToFahrenheit, computeLocalTime, knotsToMph, mpsToKnots)
 
 
 isolateMetarLine :: String -> Either String String
@@ -24,9 +24,12 @@ parse tz metarString = do
   let parsedTime = matchRegex (mkRegex ".* [0-9]{2}([0-9]{2})([0-9]{2})Z .*") metarString
   time' <- maybe (Left $ printf "Unable to parse time from: %s" metarString) Right $ computeLocalTime tz =<< parsedTime
 
-  let parsedWind = matchRegex (mkRegex ".* .{3}([0-9]{2,3})(G.*)?KT .*") metarString
-  windValues <- maybe (Left $ printf "Unable to parse wind from: %s" metarString) Right parsedWind
-  let windKts' = WindKts . read $ windValues !! 0
+  let mbWindKt = matchRegex (mkRegex ".* .{3}([0-9]{2,3})(G.*)?KT .*") metarString
+  let mbWindMps = matchRegex (mkRegex ".* .{3}([0-9]{2,3})(G.*)?MPS .*") metarString
+  (conversionFunction, windValues) <- maybe (Left $ printf "Unable to parse wind from: %s" metarString) Right
+    $ getFirst . mconcat . map First $ zipWith (\fn wind -> return . (,) fn =<< wind)
+        [WindKts, mpsToKnots] [mbWindKt, mbWindMps]
+  let windKts' = conversionFunction . read $ windValues !! 0
 
   let mbTempRmk = mkTempCelsius $ matchRegex (mkRegex ".* T([0-9]{1})([0-9]{3})[0-9]{4}.*") metarString
   let mbTemp = mkTempCelsius $ matchRegex (mkRegex ".* (M)?([0-9]{2,3})/M?[0-9]{2,3} .*") metarString

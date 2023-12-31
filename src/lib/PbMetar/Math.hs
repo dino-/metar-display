@@ -18,6 +18,10 @@ knotsToMph :: WindKts -> WindMph
 knotsToMph (WindKts knots) = WindMph $ knots * 6076 / 5280
 
 
+mpsToKnots :: Double -> WindKts
+mpsToKnots mps = WindKts $ mps * 1.9438445
+
+
 calculateWindChill :: WindMph -> TempFahr -> WindChill
 calculateWindChill (WindMph wind) (TempFahr tempF)
   | wind < 3.0 = NoEffect

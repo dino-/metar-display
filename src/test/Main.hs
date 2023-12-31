@@ -36,4 +36,10 @@ main = defaultMain $ testGroup " tests"
 
   , testCase "Temperature data only in M02/M02 format" $
       (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 8.0, tempC = TempCelsius (-2.0), windMph = WindMph 9.206060606060607, tempF = TempFahr 28.4}) (WindChill (TempCelsius (-7.381161358494646)) (TempFahr 18.713909554709637)))) @=? (parse utc "EKCH 310350Z AUTO 15008KT 9999 OVC032/// M02/M02 Q1009 NOSIG")
+
+  , testCase "Wind speed in MPS using 2 digits: 15004MPS" $
+      (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 7.775378, tempC = TempCelsius 5.0, windMph = WindMph 8.947575137878788, tempF = TempFahr 41.0}) (WindChill (TempCelsius 1.303595981550032) (TempFahr 34.34647276679006)))) @=? (parse utc "EKCH 310350Z AUTO 15004MPS 9999 OVC032/// 05/04 Q1009 NOSIG")
+
+  , testCase "Wind speed in MPS using 3 digits: 150004MPS" $
+      (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 7.775378, tempC = TempCelsius 5.0, windMph = WindMph 8.947575137878788, tempF = TempFahr 41.0}) (WindChill (TempCelsius 1.303595981550032) (TempFahr 34.34647276679006)))) @=? (parse utc "EKCH 310350Z AUTO 150004MPS 9999 OVC032/// 05/04 Q1009 NOSIG")
   ]
