@@ -15,15 +15,16 @@ data Options = Options
 
 
 newtype WindKts = WindKts Double
-  deriving Show
+  deriving (Eq, Show)
 
 newtype WindMph = WindMph Double
-  deriving Show
+  deriving (Eq, Show)
 
 newtype TempCelsius = TempCelsius Double
-  deriving Show
+  deriving (Eq, Show)
 
 newtype TempFahr = TempFahr Double
+  deriving (Eq, Show)
 
 data Observations = Observations
   { time :: TimeOfDay
@@ -32,9 +33,12 @@ data Observations = Observations
   , windMph :: WindMph
   , tempF :: TempFahr
   }
+  deriving (Eq, Show)
 
 data WindChill
   = WindChill TempCelsius TempFahr
   | NoEffect
+  deriving (Eq, Show)
 
 data Weather = Weather Observations WindChill
+  deriving (Eq, Show)

@@ -88,18 +88,15 @@ executable polybar-metar-weather
     , polybar-metar-weather
     , prettyprinter
 
--- test-suite basic-wrk-test-suite
---   import: lang
---   type: exitcode-stdio-1.0
---   main-is: Main.hs
---   -- other-modules:
---   --     Paths_fixme
---   hs-source-dirs:
---     src/test
---   ghc-options: -rtsopts -threaded -with-rtsopts=-N
---   build-depends:
---       base >=3 && <5
---     , pbmetar
---     , tasty
---     , tasty-hunit
---     , tasty-quickcheck
+test-suite test-suite
+  import: lang
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  hs-source-dirs:
+    src/test
+  ghc-options: -rtsopts -threaded -with-rtsopts=-N
+  build-depends:
+      base >=3 && <5
+    , polybar-metar-weather
+    , tasty
+    , tasty-hunit
