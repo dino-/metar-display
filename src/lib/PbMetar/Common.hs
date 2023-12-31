@@ -6,11 +6,11 @@ import Data.Time.LocalTime (TimeOfDay (..))
 
 newtype Station = Station String
 
--- newtype FontIndex = FontIndex Int
+newtype FontIndex = FontIndex Int
 
 data Options = Options
   { optStation :: Station
-  -- , optStation :: FontIndex
+  , optFontIndex :: FontIndex
   }
 
 

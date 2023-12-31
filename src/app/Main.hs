@@ -21,24 +21,28 @@ main = do
   either (const $ pure ()) (noticeM lname) eMetarString
   tz <- getCurrentTimeZone
   let parsed = parse tz =<< eMetarString
-  either exitFail exitOk parsed
+  either exitFail (exitOk $ optFontIndex opts) parsed
 
 
-exitOk :: Weather -> IO ()
-exitOk (Weather obs chill) = do
+exitOk :: FontIndex -> Weather -> IO ()
+exitOk fi@(FontIndex fontIndex) (Weather obs chill) = do
   let (TempFahr tempF) = obs.tempF
   let (TempCelsius tempC) = obs.tempC
   let (WindMph windMph) = obs.windMph
-  out $ printf "%%{T2}\xe586%%{T-} %02d:%02d %%{T2}\xf2c9%%{T-} %.0f°F %01f°C %%{T2}\xf72e%%{T-} %.1fmph%s"
-    obs.time.todHour obs.time.todMin tempF tempC windMph (mkWindChillDisplay chill)
+  let outputString = printf "%%{T%d}\xe586%%{T-} %02d:%02d %%{T%d}\xf2c9%%{T-} %.0f°F %01f°C %%{T%d}\xf72e%%{T-} %.1fmph%s"
+        fontIndex obs.time.todHour obs.time.todMin
+        fontIndex tempF tempC
+        fontIndex windMph (mkWindChillDisplay fi chill)
+  infoM lname $ "stdout output string: " <> outputString
+  out outputString
   infoM lname "polybar-metar-weather finished successfully"
   exitSuccess
 
 
-mkWindChillDisplay :: WindChill -> String
-mkWindChillDisplay (WindChill (TempCelsius windChillC) (TempFahr windChillF)) =
-  printf " %%{T2}\xf7ad%%{T-} %.0f°F %.1f°C" windChillF windChillC
-mkWindChillDisplay NoEffect = ""
+mkWindChillDisplay :: FontIndex -> WindChill -> String
+mkWindChillDisplay (FontIndex fontIndex) (WindChill (TempCelsius windChillC) (TempFahr windChillF)) =
+  printf " %%{T%d}\xf7ad%%{T-} %.0f°F %.1f°C" fontIndex windChillF windChillC
+mkWindChillDisplay _ NoEffect = ""
 
 
 exitFail :: String -> IO ()

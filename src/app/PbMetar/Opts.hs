@@ -14,7 +14,7 @@ import System.Environment (getProgName)
 import Text.Heredoc (here)
 import Text.Printf (printf)
 
-import PbMetar.Common (Options (..), Station (..))
+import PbMetar.Common (FontIndex (..), Options (..), Station (..))
 
 
 parser :: Parser Options
@@ -23,6 +23,13 @@ parser = Options
         (  metavar "STATION"
         <> help "Retrieve weather data for this station. See STATION below"
         )
+  <*> ( FontIndex <$> argument auto
+        (  metavar "FONT-INDEX"
+        <> help "Index of polybar font for Font Awesome glyphs"
+        <> showDefault
+        <> value 2
+        )
+      )
 
 
 versionHelper :: String -> Parser (a -> a)
@@ -47,6 +54,11 @@ footer' :: InfoMod a
 footer' = footerDoc . Just . pretty $ (printf content (showVersion version) :: String)
   where content = [here|OVERVIEW
 
-Overview text goes here.
+The default FONT-INDEX assumes it's the second one declared in polybar's
+config.ini (font-1)
+
+But note FONT-INDEX is often not necessary even if the index is wrong because polybar
+tries to figure out a loaded font that has the glyphs needed. You'll probably
+need it only when using more than one glyph font.
 
 Version %s  Dino Morelli <dino@ui3.info>|]
