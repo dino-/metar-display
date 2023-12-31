@@ -25,9 +25,16 @@ newtype TempCelsius = TempCelsius Double
 
 newtype TempFahr = TempFahr Double
 
-data Metar = Metar
+data Observations = Observations
   { time :: TimeOfDay
-  , wind :: WindKts
-  , temperature :: TempCelsius
+  , windKts :: WindKts
+  , tempC :: TempCelsius
+  , windMph :: WindMph
+  , tempF :: TempFahr
   }
-  deriving Show
+
+data WindChill
+  = WindChill TempCelsius TempFahr
+  | NoEffect
+
+data Weather = Weather Observations WindChill

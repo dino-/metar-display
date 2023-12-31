@@ -18,12 +18,14 @@ knotsToMph :: WindKts -> WindMph
 knotsToMph (WindKts knots) = WindMph $ knots * 6076 / 5280
 
 
-calculateWindChill :: WindMph -> TempFahr -> Maybe TempFahr
+calculateWindChill :: WindMph -> TempFahr -> WindChill
 calculateWindChill (WindMph wind) (TempFahr tempF)
-  | wind < 3.0 = Nothing
-  | otherwise = Just . TempFahr $
-      34.74 + (0.6215 * tempF) - (35.75 * (wind ** exp')) + (0.4275 * tempF * (wind ** exp'))
-      where exp' = 0.16 :: Double
+  | wind < 3.0 = NoEffect
+  | otherwise = WindChill tempC' tempF'
+      where
+        exp' = 0.16 :: Double
+        tempF' = TempFahr $ 34.74 + (0.6215 * tempF) - (35.75 * (wind ** exp')) + (0.4275 * tempF * (wind ** exp'))
+        tempC' = fahrenheitToCelsius tempF'
 
 
 computeLocalTime :: TimeZone -> [String] -> Maybe TimeOfDay
