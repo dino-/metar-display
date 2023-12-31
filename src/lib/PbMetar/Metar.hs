@@ -4,6 +4,7 @@ module PbMetar.Metar
   )
   where
 
+import Data.Monoid (First (..), getFirst)
 import Data.Time.LocalTime (TimeZone)
 import Text.Printf (printf)
 import Text.Regex (matchRegex, mkRegex)
@@ -27,8 +28,10 @@ parse tz metarString = do
   windValues <- maybe (Left $ printf "Unable to parse wind from: %s" metarString) Right parsedWind
   let windKts' = WindKts . read $ windValues !! 0
 
-  let mbTemp = mkTempCelsius $ matchRegex (mkRegex ".* T([0-9]{1})([0-9]{3})[0-9]{4}.*") metarString
-  tempC' <- maybe (Left $ printf "Unable to parse temperature from: %s" metarString) Right mbTemp
+  let mbTempRmk = mkTempCelsius $ matchRegex (mkRegex ".* T([0-9]{1})([0-9]{3})[0-9]{4}.*") metarString
+  let mbTemp = mkTempCelsius $ matchRegex (mkRegex ".* (M)?([0-9]{2,3})/M?[0-9]{2,3} .*") metarString
+  tempC' <- maybe (Left $ printf "Unable to parse temperature from: %s" metarString) Right
+    $ getFirst . mconcat . map First $ [mbTempRmk, mbTemp]
 
   let tempF' = celsiusToFahrenheit tempC'
   let obs = Observations time' windKts' tempC' (knotsToMph windKts') tempF'
@@ -39,4 +42,6 @@ parse tz metarString = do
 mkTempCelsius :: Maybe [String] -> Maybe TempCelsius
 mkTempCelsius (Just ["0", tempC]) = Just . TempCelsius . (/ 10.0) . read $ tempC
 mkTempCelsius (Just ["1", tempC]) = Just . TempCelsius . negate . (/ 10.0) . read $ tempC
+mkTempCelsius (Just ["",  tempC]) = Just . TempCelsius . read $ tempC
+mkTempCelsius (Just ["M", tempC]) = Just . TempCelsius . negate . read $ tempC
 mkTempCelsius _ = Nothing

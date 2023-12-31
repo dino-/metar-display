@@ -24,4 +24,16 @@ main = defaultMain $ testGroup " tests"
 
   , testCase "Wind gust using 3 digits: 28008G107KT" $
       (Right (Weather (Observations {time = TimeOfDay 16 51 0, windKts = WindKts 8.0, tempC = TempCelsius 9.4, windMph = WindMph 9.206060606060607, tempF = TempFahr 48.92}) (WindChill (TempCelsius 6.655666833513599) (TempFahr 43.980200300324476)))) @=? (parse utc "KRDU 301651Z 28008G17KT 10SM FEW047 SCT065 09/M02 A2992 RMK AO2 SLP134 T00941022")
+
+  , testCase "Temperature data only in 05/04 format" $
+      (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 8.0, tempC = TempCelsius 5.0, windMph = WindMph 9.206060606060607, tempF = TempFahr 41.0}) (WindChill (TempCelsius 1.237943671685855) (TempFahr 34.22829860903454)))) @=? (parse utc "EKCH 310350Z AUTO 15008KT 9999 OVC032/// 05/04 Q1009 NOSIG")
+
+  , testCase "Temperature data only in 05/M04 format" $
+      (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 8.0, tempC = TempCelsius 5.0, windMph = WindMph 9.206060606060607, tempF = TempFahr 41.0}) (WindChill (TempCelsius 1.237943671685855) (TempFahr 34.22829860903454)))) @=? (parse utc "EKCH 310350Z AUTO 15008KT 9999 OVC032/// 05/M04 Q1009 NOSIG")
+
+  , testCase "Temperature data only in M05/04 format" $
+      (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 8.0, tempC = TempCelsius (-5.0), windMph = WindMph 9.206060606060607, tempF = TempFahr 23.0}) (WindChill (TempCelsius (-11.075063514286292)) (TempFahr 12.064885674284676)))) @=? (parse utc "EKCH 310350Z AUTO 15008KT 9999 OVC032/// M05/04 Q1009 NOSIG")
+
+  , testCase "Temperature data only in M02/M02 format" $
+      (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 8.0, tempC = TempCelsius (-2.0), windMph = WindMph 9.206060606060607, tempF = TempFahr 28.4}) (WindChill (TempCelsius (-7.381161358494646)) (TempFahr 18.713909554709637)))) @=? (parse utc "EKCH 310350Z AUTO 15008KT 9999 OVC032/// M02/M02 Q1009 NOSIG")
   ]
