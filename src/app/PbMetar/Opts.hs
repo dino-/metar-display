@@ -10,19 +10,28 @@ import Options.Applicative
 import Paths_polybar_metar_weather (version)
 import Prettyprinter (pretty)
 import System.Environment (getProgName)
--- import System.Log (Priority (INFO))
 import Text.Heredoc (here)
 import Text.Printf (printf)
 
-import PbMetar.Common (FontIndex (..), Options (..), Station (..))
+import PbMetar.Common (FontIndex (..), Options (..), Station (..), intToVerbosity)
 
 
 parser :: Parser Options
 parser = Options
-  <$> Station <$> strArgument
+  <$> ( intToVerbosity <$> option auto
+        (  long "verbose"
+        <> short 'v'
+        <> metavar "NUM"
+        <> help "Verbosity level. 0=quiet, 1=warnings/errors, 2=normal messages, 3=more info, 4=debug"
+        <> showDefault
+        <> value 2
+        )
+      )
+  <*> ( Station <$> strArgument
         (  metavar "STATION"
         <> help "Retrieve weather data for this station. See STATION below"
         )
+      )
   <*> ( FontIndex <$> argument auto
         (  metavar "FONT-INDEX"
         <> help "Index of polybar font for Font Awesome glyphs"

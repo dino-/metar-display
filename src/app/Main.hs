@@ -6,7 +6,7 @@ import Text.Printf (printf)
 
 import PbMetar.Common
 import PbMetar.Curl (getMetar)
-import PbMetar.Log (Priority (NOTICE), criticalM, infoM, initLogging, lname, noticeM, out)
+import PbMetar.Log (criticalM, infoM, initLogging, lname, noticeM, out)
 import PbMetar.Metar (isolateMetarLine, parse)
 import PbMetar.Opts (parseOpts)
 
@@ -14,7 +14,7 @@ import PbMetar.Opts (parseOpts)
 main :: IO ()
 main = do
   opts <- parseOpts
-  initLogging NOTICE
+  initLogging $ optVerbosity opts
   infoM lname "polybar-metar-weather started"
   curlResult <- getMetar $ optStation opts
   let eMetarString = isolateMetarLine =<< curlResult

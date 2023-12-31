@@ -13,6 +13,8 @@ import System.Log.Handler (setFormatter)
 import System.Log.Handler.Simple (streamHandler)
 import System.Log.Logger
 
+import PbMetar.Common (Verbosity (..))
+
 
 lname :: String
 lname = "logger"
@@ -26,17 +28,20 @@ out :: String -> IO ()
 out = infoM outputLoggerName
 
 
-initLogging :: Priority -> IO ()
-initLogging priority = do
+initLogging :: Verbosity -> IO ()
+initLogging verbosity = do
   -- Remove the root logger's default handler that writes every
   -- message to stderr!
   updateGlobalLogger rootLoggerName removeHandler
   updateGlobalLogger rootLoggerName $ setLevel DEBUG
 
   -- The logger for the actual log of this software, goes to stderr
-  (flip setFormatter $ simpleLogFormatter "[$time : $prio] $msg")
-    <$> streamHandler stderr priority
-    >>= updateGlobalLogger lname . addHandler
+  case verbosity of
+    Quiet -> pure ()
+    (Verbose priority) ->
+      (flip setFormatter $ simpleLogFormatter "[$time : $prio] $msg")
+        <$> streamHandler stderr priority
+        >>= updateGlobalLogger lname . addHandler
 
   -- The logger for normal stdout output of this software, what polybar shows
   streamHandler stdout DEBUG >>= (updateGlobalLogger outputLoggerName . addHandler)
