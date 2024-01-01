@@ -41,4 +41,4 @@ mkWindChillDisplay _ _ NoEffect = ""
 
 mkColorFormatting :: ColorText -> (String, String)
 mkColorFormatting NoColorChange = ("", "")
-mkColorFormatting (ColorText colText) = ( printf "%%{F%s}" colText, "%%{F-}")
+mkColorFormatting (ColorText colText) = ( printf "%%{F%s}" colText, "%{F-}")
