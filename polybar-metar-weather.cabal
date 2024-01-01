@@ -65,6 +65,7 @@ library
     PbMetar.Log
     PbMetar.Math
     PbMetar.Metar
+    PbMetar.Output
   hs-source-dirs:
     src/lib
   build-depends:
