@@ -14,7 +14,7 @@ import System.Environment (getProgName)
 import Text.Heredoc (here)
 import Text.Printf (printf)
 
-import PbMetar.Common (FontIndex (..), Options (..), Station (..), intToVerbosity)
+import PbMetar.Common (ColorText (ColorText, NoColorChange), FontIndex (..), Options (..), Station (..), intToVerbosity)
 
 
 parser :: Parser Options
@@ -28,6 +28,12 @@ parser = Options
         <> value 2
         )
       )
+  <*> ( maybe NoColorChange ColorText <$> optional (strOption
+        (  long "col-text"
+        <> metavar "#RRGGBB"
+        <> help "Color to use for the text portions of the output"
+        )
+      ))
   <*> ( Station . map toUpper <$> strArgument
         (  metavar "STATION"
         <> help "Retrieve weather data for this station. See STATION below"

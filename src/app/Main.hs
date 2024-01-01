@@ -21,28 +21,35 @@ main = do
   either (const $ pure ()) (noticeM lname) eMetarString
   tz <- getCurrentTimeZone
   let parsed = parse tz =<< eMetarString
-  either exitFail (exitOk $ optFontIndex opts) parsed
+  either exitFail (exitOk (optFontIndex opts) (optColorText opts)) parsed
 
 
-exitOk :: FontIndex -> Weather -> IO ()
-exitOk fi@(FontIndex fontIndex) (Weather obs chill) = do
+exitOk :: FontIndex -> ColorText -> Weather -> IO ()
+exitOk fi@(FontIndex fontIndex) colorText (Weather obs chill) = do
   let (TempFahr tempF) = obs.tempF
   let (TempCelsius tempC) = obs.tempC
   let (WindMph windMph) = obs.windMph
-  let outputString = printf "%%{T%d}\xe586%%{T-} %02d:%02d %%{T%d}\xf2c9%%{T-} %.0f°F %01f°C %%{T%d}\xf72e%%{T-} %.1fmph%s"
-        fontIndex obs.time.todHour obs.time.todMin
-        fontIndex tempF tempC
-        fontIndex windMph (mkWindChillDisplay fi chill)
+  let (colorBegin, colorEnd) = mkColorFormatting colorText
+  let outputString = printf "%%{T%d}\xe586%%{T-} %s%02d:%02d%s %%{T%d}\xf2c9%%{T-} %s%.0f°F %01f°C%s %%{T%d}\xf72e%%{T-} %s%.1fmph%s%s"
+        fontIndex colorBegin obs.time.todHour obs.time.todMin colorEnd
+        fontIndex colorBegin tempF tempC colorEnd
+        fontIndex colorBegin windMph colorEnd (mkWindChillDisplay fi colorText chill)
   infoM lname $ "stdout output string: " <> outputString
   out outputString
   infoM lname "polybar-metar-weather finished successfully"
   exitSuccess
 
 
-mkWindChillDisplay :: FontIndex -> WindChill -> String
-mkWindChillDisplay (FontIndex fontIndex) (WindChill (TempCelsius windChillC) (TempFahr windChillF)) =
-  printf " %%{T%d}\xf7ad%%{T-} %.0f°F %.1f°C" fontIndex windChillF windChillC
-mkWindChillDisplay _ NoEffect = ""
+mkWindChillDisplay :: FontIndex -> ColorText -> WindChill -> String
+mkWindChillDisplay (FontIndex fontIndex) colorText (WindChill (TempCelsius windChillC) (TempFahr windChillF)) =
+  printf " %%{T%d}\xf7ad%%{T-} %s%.0f°F %.1f°C%s" fontIndex colorBegin windChillF windChillC colorEnd
+  where (colorBegin, colorEnd) = mkColorFormatting colorText
+mkWindChillDisplay _ _ NoEffect = ""
+
+
+mkColorFormatting :: ColorText -> (String, String)
+mkColorFormatting NoColorChange = ("", "")
+mkColorFormatting (ColorText colText) = ( printf "%%{F%s}" colText, "%%{F-}")
 
 
 exitFail :: String -> IO ()

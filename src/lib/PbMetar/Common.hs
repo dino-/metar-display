@@ -20,8 +20,13 @@ intToVerbosity 2 = Verbose NOTICE
 intToVerbosity 3 = Verbose INFO
 intToVerbosity _ = Verbose DEBUG
 
+data ColorText
+  = NoColorChange
+  | ColorText String
+
 data Options = Options
   { optVerbosity :: Verbosity
+  , optColorText :: ColorText
   , optStation :: Station
   , optFontIndex :: FontIndex
   }
