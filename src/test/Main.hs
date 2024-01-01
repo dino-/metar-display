@@ -42,4 +42,7 @@ main = defaultMain $ testGroup " tests"
 
   , testCase "Wind speed in MPS using 3 digits: 150004MPS" $
       (Right (Weather (Observations {time = TimeOfDay 3 50 0, windKts = WindKts 7.775378, tempC = TempCelsius 5.0, windMph = WindMph 8.947575137878788, tempF = TempFahr 41.0}) (WindChill (TempCelsius 1.303595981550032) (TempFahr 34.34647276679006)))) @=? (parse utc "EKCH 310350Z AUTO 150004MPS 9999 OVC032/// 05/04 Q1009 NOSIG")
+
+  , testCase "No wind info at all" $
+      (Right (Weather (Observations {time = TimeOfDay 20 51 0, windKts = WindKts 0.0, tempC = TempCelsius 9.4, windMph = WindMph 0.0, tempF = TempFahr 48.92}) NoEffect)) @=? (parse utc "KRDU 012051Z 10SM SCT040 SCT200 BKN250 09/M02 A3004 RMK AO2 SLP174 T00941022 53007")
   ]

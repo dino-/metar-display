@@ -28,7 +28,7 @@ parse tz metarString = do
   let mbWindMps = matchRegex (mkRegex ".* .{3}([0-9]{2,3})(G.*)?MPS .*") metarString
   (conversionFunction, windValues) <- maybe (Left $ printf "Unable to parse wind from: %s" metarString) Right
     $ getFirst . mconcat . map First $ zipWith (\fn wind -> return . (,) fn =<< wind)
-        [WindKts, mpsToKnots] [mbWindKt, mbWindMps]
+        [WindKts, mpsToKnots, WindKts] [mbWindKt, mbWindMps, Just ["0"]]
   let windKts' = conversionFunction . read $ windValues !! 0
 
   let mbTempRmk = mkTempCelsius $ matchRegex (mkRegex ".* T([0-9]{1})([0-9]{3})[0-9]{4}.*") metarString
