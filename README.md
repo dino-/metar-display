@@ -23,6 +23,10 @@ distro's packaging system or from a release on Github but if you like:
 
 Which will install it in `~/.local/bin`
 
+Details regarding integration with polybar's config are in the usage
+
+    $ polybar-metar-weather --help
+
 
 ## Getting source
 
