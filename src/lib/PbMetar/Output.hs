@@ -21,22 +21,28 @@ import PbMetar.Common
 
 
 mkPolybarLabel :: FontIndex -> ColorText -> Weather -> String
-mkPolybarLabel fi@(FontIndex fontIndex) colorText (Weather obs chill) = do
-  let (TempFahr tempF) = obs.tempF
-  let (TempCelsius tempC) = obs.tempC
+mkPolybarLabel (FontIndex fontIndex) colorText weather@(Weather obs _) =
   let (WindMph windMph) = obs.windMph
-  let (colorBegin, colorEnd) = mkColorFormatting colorText
-  printf "%%{T%d}\xe586%%{T-} %s%02d:%02d%s %%{T%d}\xf2c9%%{T-} %s%.0f°F %01f°C%s %%{T%d}\xf72e%%{T-} %s%.1fmph%s%s"
+      (colorBegin, colorEnd) = mkColorFormatting colorText
+  in printf "%%{T%d}\xe586%%{T-} %s%02d:%02d%s %%{T%d}\xf2c9%%{T-} %s %%{T%d}\xf72e%%{T-} %s%.1fmph%s"
         fontIndex colorBegin obs.time.todHour obs.time.todMin colorEnd
-        fontIndex colorBegin tempF tempC colorEnd
-        fontIndex colorBegin windMph colorEnd (mkWindChillDisplay fi colorText chill)
+        fontIndex (mkTempDisplay colorText weather)
+        fontIndex colorBegin windMph colorEnd
 
 
-mkWindChillDisplay :: FontIndex -> ColorText -> WindChill -> String
-mkWindChillDisplay (FontIndex fontIndex) colorText (WindChill (TempCelsius windChillC) (TempFahr windChillF)) =
-  printf " %%{T%d}\xf7ad%%{T-} %s%.0f°F %.1f°C%s" fontIndex colorBegin windChillF windChillC colorEnd
-  where (colorBegin, colorEnd) = mkColorFormatting colorText
-mkWindChillDisplay _ _ NoEffect = ""
+mkTempDisplay :: ColorText -> Weather -> String
+mkTempDisplay colorText (Weather obs chill) =
+  let (TempFahr tempF) = obs.tempF
+      (TempCelsius tempC) = obs.tempC
+      (colorBegin, colorEnd) = mkColorFormatting colorText
+      (windChillTempF, windChillTempC) = mkWindChillTemps chill
+  in printf "%s%.0f°F%s %.1f°C%s%s" colorBegin tempF windChillTempF tempC windChillTempC colorEnd
+
+
+mkWindChillTemps :: WindChill -> (String, String)
+mkWindChillTemps NoEffect = ("", "")
+mkWindChillTemps (WindChill (TempCelsius windChillC) (TempFahr windChillF)) =
+  (printf "/%.0f°F" windChillF, printf "/%.1f°C" windChillC)
 
 
 mkColorFormatting :: ColorText -> (String, String)
