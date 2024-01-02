@@ -1,4 +1,4 @@
-import Data.Time.LocalTime (getCurrentTimeZone)
+-- import Data.Time.LocalTime (getCurrentTimeZone)
 import System.Exit (exitFailure, exitSuccess)
 
 import PbMetar.Common (Options (..))
@@ -17,8 +17,7 @@ main = do
   curlResult <- getMetar $ optStation opts
   let eMetarString = isolateMetarLine =<< curlResult
   either (const $ pure ()) (noticeM lname) eMetarString
-  tz <- getCurrentTimeZone
-  let parsed = parse tz =<< eMetarString
+  let parsed = parse =<< eMetarString
   either exitFail (exitOk . mkPolybarLabel (optFontIndex opts) (optColorText opts)) parsed
 
 

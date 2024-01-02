@@ -32,31 +32,56 @@ data Options = Options
   }
 
 
-newtype WindKts = WindKts Double
+data Imperial   -- Units like degrees Fahrenheit, miles per hour, for human-readability
+data Metric     -- Units like degrees Celsius, kilometers per hour, for human-readability
+data Nautical   -- For wind speed in knots, METAR wind data almost always comes in this form
+data Meters     -- The odd case where units come in from METAR in meters per second
+
+class Convert systemFrom systemTo where
+  convert :: systemFrom -> systemTo
+
+
+newtype Wind system = Wind Double
   deriving (Eq, Show)
 
-newtype WindMph = WindMph Double
+instance Convert (Wind Metric) (Wind Imperial) where
+  convert (Wind windKph) = Wind $ windKph * 0.62137119
+
+instance Convert (Wind Imperial) (Wind Metric) where
+  convert (Wind windMph) = Wind $ windMph * 1.609344
+
+instance Convert (Wind Nautical) (Wind Metric) where
+  convert (Wind windKts) = Wind $ windKts * 1.852
+
+instance Convert (Wind Meters) (Wind Metric) where
+  convert (Wind windMps) = Wind $ windMps * 3.6
+
+
+newtype Temperature system = Temperature Double
   deriving (Eq, Show)
 
-newtype TempCelsius = TempCelsius Double
-  deriving (Eq, Show)
+instance Convert (Temperature Metric) (Temperature Imperial) where
+  convert (Temperature tempC) = Temperature $ tempC * (9 / 5) + 32.0
 
-newtype TempFahr = TempFahr Double
-  deriving (Eq, Show)
+instance Convert (Temperature Imperial) (Temperature Metric) where
+  convert (Temperature tempF) = Temperature $ (tempF - 32.0) * (5 / 9)
 
-data Observations = Observations
-  { time :: TimeOfDay
-  , windKts :: WindKts
-  , tempC :: TempCelsius
-  , windMph :: WindMph
-  , tempF :: TempFahr
+
+data Weather system = Weather
+  { timeUtc :: TimeOfDay
+  , wind :: Wind system
+  , temperature :: Temperature system
   }
   deriving (Eq, Show)
 
-data WindChill
-  = WindChill TempCelsius TempFahr
-  | NoEffect
-  deriving (Eq, Show)
+instance Convert (Weather Imperial) (Weather Metric) where
+  convert (Weather timeUtc wind temperature) = Weather timeUtc (convert wind) (convert temperature)
 
-data Weather = Weather Observations WindChill
+instance Convert (Weather Metric) (Weather Imperial) where
+  convert (Weather timeUtc wind temperature) = Weather timeUtc (convert wind) (convert temperature)
+
+
+data WindChill system
+  = WindChill (Temperature system)
+  | NoEffect
   deriving (Eq, Show)
