@@ -13,7 +13,7 @@ import System.Log.Handler (setFormatter)
 import System.Log.Handler.Simple (streamHandler)
 import System.Log.Logger
 
-import PbMetar.Common (Verbosity (..))
+import PbMetar.Model.Options (Verbosity (..))
 
 
 lname :: String

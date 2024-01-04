@@ -1,7 +1,10 @@
 module PbMetar.Math
   where
 
-import PbMetar.Common
+import PbMetar.Model.Common
+import PbMetar.Model.Temperature
+import PbMetar.Model.Weather
+import PbMetar.Model.Wind
 
 
 calculateWindChill :: (Weather Imperial) -> WindChill Imperial

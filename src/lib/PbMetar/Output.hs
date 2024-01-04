@@ -6,17 +6,11 @@ module PbMetar.Output
 import Data.Time.LocalTime (TimeOfDay (..), TimeZone, utcToLocalTimeOfDay)
 import Text.Printf (printf)
 
-import PbMetar.Common
-  ( ColorText (NoColorChange, ColorText)
-  , FontIndex (..)
-  , Imperial
-  , Metric
-  , Temperature (..)
-  , Weather (..)
-  , Wind (..)
-  , WindChill (NoEffect, WindChill)
-  , convert
-  )
+import PbMetar.Model.Common
+import PbMetar.Model.Options
+import PbMetar.Model.Temperature
+import PbMetar.Model.Weather
+import PbMetar.Model.Wind
 import PbMetar.Math (calculateWindChill)
 
 

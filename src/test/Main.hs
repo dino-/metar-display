@@ -1,6 +1,9 @@
 import Data.Time.LocalTime (TimeOfDay (..))
-import PbMetar.Common
 import PbMetar.Metar (parse)
+import PbMetar.Model.Common
+import PbMetar.Model.Temperature
+import PbMetar.Model.Weather
+import PbMetar.Model.Wind
 import Test.Tasty
 import Test.Tasty.HUnit
 

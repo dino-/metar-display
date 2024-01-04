@@ -60,11 +60,15 @@ common lang
 library
   import: lang
   exposed-modules:
-    PbMetar.Common
     PbMetar.Curl
     PbMetar.Log
     PbMetar.Math
     PbMetar.Metar
+    PbMetar.Model.Common
+    PbMetar.Model.Options
+    PbMetar.Model.Temperature
+    PbMetar.Model.Weather
+    PbMetar.Model.Wind
     PbMetar.Output
   hs-source-dirs:
     src/lib

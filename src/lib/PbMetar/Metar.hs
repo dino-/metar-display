@@ -10,7 +10,10 @@ import Data.Monoid (First (..), getFirst)
 import Data.Time.LocalTime (TimeOfDay (..))
 import Text.Regex (matchRegex, mkRegex)
 
-import PbMetar.Common
+import PbMetar.Model.Common
+import PbMetar.Model.Temperature
+import PbMetar.Model.Weather
+import PbMetar.Model.Wind
 
 
 isolateMetarLine :: String -> Either String String

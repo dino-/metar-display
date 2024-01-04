@@ -14,7 +14,7 @@ import System.Environment (getProgName)
 import Text.Heredoc (here)
 import Text.Printf (printf)
 
-import PbMetar.Common (ColorText (ColorText, NoColorChange), FontIndex (..), Options (..), Station (..), intToVerbosity)
+import PbMetar.Model.Options
 
 
 parser :: Parser Options

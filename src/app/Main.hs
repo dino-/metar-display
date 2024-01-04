@@ -1,10 +1,10 @@
 import Data.Time.LocalTime (getCurrentTimeZone)
 import System.Exit (exitFailure, exitSuccess)
 
-import PbMetar.Common (Options (..))
 import PbMetar.Curl (getMetar)
 import PbMetar.Log (criticalM, infoM, initLogging, lname, noticeM, out)
 import PbMetar.Metar (isolateMetarLine, parse)
+import PbMetar.Model.Options (Options (..))
 import PbMetar.Opts (parseOpts)
 import PbMetar.Output (mkPolybarLabel)
 
