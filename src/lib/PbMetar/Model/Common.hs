@@ -9,3 +9,6 @@ data Meters     -- The odd case where units come in from METAR in meters per sec
 
 class Convert systemFrom systemTo where
   convert :: systemFrom -> systemTo
+
+class Format system where
+  format :: system -> String

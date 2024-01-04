@@ -15,6 +15,7 @@ data Weather system = Weather
   }
   deriving (Eq, Show)
 
+
 instance Convert (Weather Imperial) (Weather Metric) where
   convert (Weather timeUtc wind temperature) = Weather timeUtc (convert wind) (convert temperature)
 
@@ -26,3 +27,12 @@ data WindChill system
   = WindChill (Temperature system)
   | NoEffect
   deriving (Eq, Show)
+
+
+instance Format (WindChill Imperial) where
+  format NoEffect = ""
+  format (WindChill tempF) = format tempF
+
+instance Format (WindChill Metric) where
+  format NoEffect = ""
+  format (WindChill tempC) = format tempC
