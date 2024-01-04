@@ -1,11 +1,9 @@
-{-# LANGUAGE OverloadedRecordDot #-}
-
 module PbMetar.Output
   ( mkPolybarLabel
   )
   where
 
-import Data.Time.LocalTime (TimeOfDay (..))
+import Data.Time.LocalTime (TimeOfDay (..), TimeZone, utcToLocalTimeOfDay)
 import Text.Printf (printf)
 
 import PbMetar.Common
@@ -22,13 +20,14 @@ import PbMetar.Common
 import PbMetar.Math (calculateWindChill)
 
 
-mkPolybarLabel :: FontIndex -> ColorText -> Weather Metric -> String
-mkPolybarLabel (FontIndex fontIndex) colorText weatherM@(Weather timeUtc' _ _) =
+mkPolybarLabel :: TimeZone -> FontIndex -> ColorText -> Weather Metric -> String
+mkPolybarLabel localZone (FontIndex fontIndex) colorText weatherM =
   let weatherI = convert weatherM :: Weather Imperial
+      (_, (TimeOfDay localHour localMin _)) = utcToLocalTimeOfDay localZone $ timeUtc weatherI
       (Wind windMph) = wind weatherI
       (colorBegin, colorEnd) = mkColorFormatting colorText
   in printf "%%{T%d}\xe586%%{T-} %s%02d:%02d%s %%{T%d}\xf2c9%%{T-} %s %%{T%d}\xf72e%%{T-} %s%.1fmph%s"
-        fontIndex colorBegin timeUtc'.todHour timeUtc'.todMin colorEnd
+        fontIndex colorBegin localHour localMin colorEnd
         fontIndex (mkTempDisplay colorText weatherI)
         fontIndex colorBegin windMph colorEnd
 
