@@ -23,9 +23,14 @@ data ColorText
   = NoColorChange
   | ColorText String
 
+data OutputUnits
+  = OUImperial
+  | OUMetric
+
 data Options = Options
-  { optVerbosity :: Verbosity
+  { optOutputUnits :: OutputUnits
   , optColorText :: ColorText
+  , optVerbosity :: Verbosity
   , optStation :: Station
   , optFontIndex :: FontIndex
   }

@@ -19,13 +19,10 @@ import PbMetar.Model.Options
 
 parser :: Parser Options
 parser = Options
-  <$> ( intToVerbosity <$> option auto
-        (  long "verbose"
-        <> short 'v'
-        <> metavar "NUM"
-        <> help "Verbosity level. 0=quiet, 1=warnings/errors, 2=normal messages, 3=more info, 4=debug"
-        <> showDefault
-        <> value 2
+  <$> ((\b -> if b then OUMetric else OUImperial) <$> switch
+        (  long "metric"
+        <> short 'm'
+        <> help "Use metric units (Celsius, kph) instead of imperial (Fahrenheit, mph)"
         )
       )
   <*> ( maybe NoColorChange ColorText <$> optional (strOption
@@ -34,6 +31,15 @@ parser = Options
         <> help "Color to use for the text portions of the output"
         )
       ))
+  <*> ( intToVerbosity <$> option auto
+        (  long "verbose"
+        <> short 'v'
+        <> metavar "NUM"
+        <> help "Verbosity level. 0=quiet, 1=warnings/errors, 2=normal messages, 3=more info, 4=debug"
+        <> showDefault
+        <> value 2
+        )
+      )
   <*> ( Station . map toUpper <$> strArgument
         (  metavar "STATION"
         <> help "Retrieve weather data for this station. See STATION below"
