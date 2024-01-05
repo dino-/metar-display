@@ -29,6 +29,15 @@ data WindChill system
   deriving (Eq, Show)
 
 
+instance Convert (WindChill Imperial) (WindChill Metric) where
+  convert (WindChill tempF) = WindChill $ convert tempF
+  convert NoEffect = NoEffect
+
+instance Convert (WindChill Metric) (WindChill Imperial) where
+  convert (WindChill tempC) = WindChill $ convert tempC
+  convert NoEffect = NoEffect
+
+
 instance Format (WindChill Imperial) where
   format NoEffect = ""
   format (WindChill tempF) = format tempF
