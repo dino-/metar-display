@@ -22,8 +22,8 @@ isolateMetarLine = Right . head . take 1 . drop 1 . lines
 
 -- KRDU 261451Z 09008KT 10SM FEW070 BKN095 BKN110 OVC250 14/08 A3019 RMK AO2 SLP220 T01390083 53003
 
-parse :: String -> Either String (Weather Metric)
-parse metarString = do
+parse :: Station -> String -> Either String (Weather Metric)
+parse station metarString = do
   let parsedTime = matchRegex (mkRegex ".* [0-9]{2}([0-9]{2})([0-9]{2})Z .*") metarString
   time <- (maybe (Left $ "Unable to parse time from: " <> metarString) Right) $ timeFromStrings =<< parsedTime
 
@@ -40,7 +40,7 @@ parse metarString = do
   tempC <- maybe (Left $ "Unable to parse temperature from: " <> metarString) Right
     $ getFirst . mconcat . map First $ [mbTempRmk, mbTemp]
 
-  pure $ Weather time windKph tempC
+  pure $ Weather station time windKph tempC
 
 
 timeFromStrings :: [String] -> Maybe TimeOfDay

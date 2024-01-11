@@ -14,6 +14,7 @@ import System.Environment (getProgName)
 import Text.Heredoc (here)
 import Text.Printf (printf)
 
+import PbMetar.Model.Common (Station (..))
 import PbMetar.Model.Options
 
 
@@ -28,22 +29,16 @@ parser = Options
         <> value 2
         )
       )
-  <*> ( maybe NoColorChange ColorText <$> optional (strOption
-        (  long "col-text"
-        <> metavar "#RRGGBB"
-        <> help "Color to use for the text portions of the output"
-        )
-      ))
   <*> ( Station . map toUpper <$> strArgument
         (  metavar "STATION"
         <> help "Retrieve weather data for this station. See STATION below"
         )
       )
-  <*> ( FontIndex <$> argument auto
-        (  metavar "FONT-INDEX"
-        <> help "Index of polybar font for Font Awesome glyphs. See FONT-INDEX below"
+  <*> ( Template <$> argument auto
+        (  metavar "TEMPLATE"
+        <> help "Mustache template for output formatting. See ?? below"
         <> showDefault
-        <> value 2
+        <> value "'{{station}}: {{tempC}}°C ({{hour}})'"
         )
       )
 

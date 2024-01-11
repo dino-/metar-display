@@ -17,9 +17,9 @@ main = do
   curlResult <- getMetar $ optStation opts
   let eMetarString = isolateMetarLine =<< curlResult
   either (const $ pure ()) (noticeM lname) eMetarString
-  let parsed = parse =<< eMetarString
+  let parsed = parse (optStation opts) =<< eMetarString
   localZone <- getCurrentTimeZone
-  either exitFail (exitOk . mkPolybarLabel localZone (optFontIndex opts) (optColorText opts)) parsed
+  either exitFail (exitOk . mkPolybarLabel localZone) parsed
 
 
 exitOk :: String -> IO ()

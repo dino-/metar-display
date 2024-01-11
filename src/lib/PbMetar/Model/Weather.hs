@@ -9,17 +9,20 @@ import PbMetar.Model.Wind
 
 
 data Weather system = Weather
-  { timeUtc :: TimeOfDay
+  { station :: Station
+  , timeUtc :: TimeOfDay
   , wind :: Wind system
   , temperature :: Temperature system
   }
   deriving (Eq, Show)
 
 instance Convert (Weather Imperial) (Weather Metric) where
-  convert (Weather timeUtc wind temperature) = Weather timeUtc (convert wind) (convert temperature)
+  convert (Weather station timeUtc wind temperature) =
+    Weather station timeUtc (convert wind) (convert temperature)
 
 instance Convert (Weather Metric) (Weather Imperial) where
-  convert (Weather timeUtc wind temperature) = Weather timeUtc (convert wind) (convert temperature)
+  convert (Weather station timeUtc wind temperature) =
+    Weather station timeUtc (convert wind) (convert temperature)
 
 
 data WindChill system

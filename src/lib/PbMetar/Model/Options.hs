@@ -1,16 +1,18 @@
 module PbMetar.Model.Options
   where
 
+import Data.Text
 import System.Log.Logger (Priority (..))
 
+import PbMetar.Model.Common (Station)
 
-newtype Station = Station String
-
-newtype FontIndex = FontIndex Int
+newtype Template = Template Text
+  deriving Show
 
 data Verbosity
   = Quiet
   | Verbose Priority
+  deriving Show
 
 intToVerbosity :: Int -> Verbosity
 intToVerbosity 0 = Quiet
@@ -19,13 +21,9 @@ intToVerbosity 2 = Verbose NOTICE
 intToVerbosity 3 = Verbose INFO
 intToVerbosity _ = Verbose DEBUG
 
-data ColorText
-  = NoColorChange
-  | ColorText String
-
 data Options = Options
   { optVerbosity :: Verbosity
-  , optColorText :: ColorText
   , optStation :: Station
-  , optFontIndex :: FontIndex
+  , optTemplate :: Template
   }
+  deriving Show

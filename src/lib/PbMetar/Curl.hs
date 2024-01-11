@@ -6,7 +6,7 @@ module PbMetar.Curl
 import Network.Curl (CurlCode (CurlOK), curlGetString)
 import Text.Printf (printf)
 
-import PbMetar.Model.Options (Station (..))
+import PbMetar.Model.Common (Station (..))
 
 
 getMetar :: Station -> IO (Either String String)

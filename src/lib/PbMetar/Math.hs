@@ -8,7 +8,7 @@ import PbMetar.Model.Wind
 
 
 calculateWindChill :: (Weather Imperial) -> WindChill Imperial
-calculateWindChill (Weather _ (Wind windMph) (Temperature tempF))
+calculateWindChill (Weather _ _ (Wind windMph) (Temperature tempF))
   | windMph < 3.0 = NoEffect
   | otherwise = WindChill windChillF
       where
