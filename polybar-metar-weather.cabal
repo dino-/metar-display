@@ -76,6 +76,7 @@ library
       base >=3 && <5
     , curl
     , hslogger
+    , mustache
     , regex-compat
     , text
 

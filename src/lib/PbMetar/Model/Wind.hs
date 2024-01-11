@@ -1,11 +1,16 @@
 module PbMetar.Model.Wind
   where
 
+import Data.Text (pack)
+import Text.Mustache (ToMustache, toMustache)
+import Text.Printf (printf)
+
 import PbMetar.Model.Common
 
 
 newtype Wind system = Wind Double
   deriving (Eq, Show)
+
 
 instance Convert (Wind Metric) (Wind Imperial) where
   convert (Wind windKph) = Wind $ windKph * 0.62137119
@@ -18,3 +23,10 @@ instance Convert (Wind Nautical) (Wind Metric) where
 
 instance Convert (Wind Meters) (Wind Metric) where
   convert (Wind windMps) = Wind $ windMps * 3.6
+
+
+instance ToMustache (Wind Metric) where
+  toMustache (Wind windKph) = toMustache . pack $ printf "%.0f" windKph
+
+instance ToMustache (Wind Imperial) where
+  toMustache (Wind windMph) = toMustache . pack $ printf "%.1f" windMph

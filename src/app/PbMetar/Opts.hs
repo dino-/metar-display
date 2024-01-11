@@ -34,11 +34,11 @@ parser = Options
         <> help "Retrieve weather data for this station. See STATION below"
         )
       )
-  <*> ( Template <$> argument auto
+  <*> ( Template <$> strArgument
         (  metavar "TEMPLATE"
-        <> help "Mustache template for output formatting. See ?? below"
+        <> help "Mustache template for output formatting. See TEMPLATE below"
         <> showDefault
-        <> value "'{{station}}: {{tempC}}°C ({{hour}})'"
+        <> value "{{station}}: {{tempC}}°C ({{hour12}})"
         )
       )
 
@@ -56,7 +56,7 @@ parseOpts :: IO Options
 parseOpts = do
   pn <- getProgName
   execParser $ info (parser <**> helper <**> versionHelper pn)
-    (  header (printf "%s - Retrieve METAR weather and build a polybar format string" pn)
+    (  header (printf "%s - Retrieve METAR weather, decode it and build customizable output of the data" pn)
     <> footer'
     )
 
@@ -74,20 +74,43 @@ Once you have a station, try running it in a terminal
 
 You should see output like this
 
-    [2023-12-29 22:41:20 EST : NOTICE] KRDU 300251Z 26005KT 10SM FEW065 04/M02 A2985 RMK AO2 SLP110 T00441017 53017
-    %%{T2}%%{T-} 21:51 %%{T2}%%{T-} 40°F 4.4°C %%{T2}%%{T-} 5.8mph %%{T2}%%{T-} 35°F 1.6°C
+    [2024-01-11 17:00:13 EST : NOTICE] KRDU 112151Z 23006KT 10SM FEW250 13/00 A3000 RMK AO2 SLP160 T01280000
+    KRDU: 12.8°C (04)
+
+TEMPLATE
+
+The template is a standard Mustache template where weather values will be substituted for these field names:
+
+    field     description                                     example
+    -------------------------------------------------------------------
+    station   Station code                                    KRDU
+    hour12    Hour of observation 12-hour format              03
+    hour24    Hour of observation 24-hour format              15
+    min       Minute of observation                           47
+    tempC     Temperature in degrees Celsius                  11.3
+    tempF     Temperature in degrees Fahrenheit               56
+    windKph   Wind speed in KPH                               11
+    windMph   Wind speed in MPH                               6.9
+    hasChill  True if there is wind chill effect (for use with {{#hasChill}}...{{/hasChill}} conditionals)
+    chillC    Wind chill temperature in degrees Celsius       2.7
+    chillF    Wind chill temperature in degrees Fahrenheit    30
 
 INTEGRATION WITH POLYBAR
 
-polybar-metar-weather must then be integrated with polybar in your polybar
-config.
+The output of this program can be used with polybar, here's how to configure
+that. In your polybar config.ini
 
     [module/weather]
     type = custom/script
 
     command = "path/if/not/on/PATH/polybar-metar-weather KXYZ 2>> ~/.xmonad/polybar-metar-weather.log"
-    exec = ${self.command}
 
+    ; Specifying your own template string
+    ; command = "path/if/not/on/PATH/polybar-metar-weather KXYZ '{{station}}: {{tempF}}°F ({{hour24}})' 2>> ~/.xmonad/polybar-metar-weather.log"
+    ; A fancier template with Font Awesome glyphs and colored text!
+    ; command = "path/if/not/on/PATH/polybar-metar-weather KXYZ %%{T2}%%{T-} %%{F#f0c674}{{station}} {{hour24}}:{{min}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{tempF}}°F{{#hasChill}}/{{chillF}}°F{{/hasChill}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{windMph}}mph%%{F-}'' 2>> ~/.xmonad/polybar-metar-weather.log"
+
+    exec = ${self.command}
     click-left = ${self.command}
 
     ; 3600 secs = 60 minutes, METAR records are often updated hourly
@@ -95,26 +118,14 @@ config.
 
 Note the `click-left` definition, which will re-run the module immediately.
 
-Also note the `2>> ~/.xmonad/...` part of the command. This will append
-polybar-metar-weather's stderr log output to the named file.
-
-For the icons this module is expecting Font Awesome to be installed and
-configured as the 2nd font (`font-1`), if you don't already have this.
+Here's an example of bringing Font Awesome into your polybar, if you don't
+already have it (in the [bar/YOURBARNAME] section):
 
     font-1 = Font Awesome 6 Free,Font Awesome 6 Free Solid:style=Solid:size=16;4
 
 And then include the weather module in one of your bar sections
 
     modules-right = ... weather ...
-
-FONT-INDEX
-
-The default FONT-INDEX assumes it's the second one declared in polybar's
-config.ini (font-1)
-
-But note FONT-INDEX is often not necessary even if the index is wrong because polybar
-tries to figure out a loaded font that has the glyphs needed. You'll probably
-need it only when using more than one glyph font.
 
 
 Version %s  Dino Morelli <dino@ui3.info>|]

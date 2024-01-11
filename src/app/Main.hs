@@ -6,7 +6,7 @@ import PbMetar.Log (criticalM, infoM, initLogging, lname, noticeM, out)
 import PbMetar.Metar (isolateMetarLine, parse)
 import PbMetar.Model.Options (Options (..))
 import PbMetar.Opts (parseOpts)
-import PbMetar.Output (mkPolybarLabel)
+import PbMetar.Output (mkOutput)
 
 
 main :: IO ()
@@ -19,7 +19,7 @@ main = do
   either (const $ pure ()) (noticeM lname) eMetarString
   let parsed = parse (optStation opts) =<< eMetarString
   localZone <- getCurrentTimeZone
-  either exitFail (exitOk . mkPolybarLabel localZone) parsed
+  either exitFail exitOk $ mkOutput (optTemplate opts) localZone =<< parsed
 
 
 exitOk :: String -> IO ()

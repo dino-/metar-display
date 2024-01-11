@@ -1,49 +1,46 @@
 module PbMetar.Output
-  ( mkPolybarLabel
+  ( mkOutput
   )
   where
 
--- import Data.Time.LocalTime (TimeOfDay (..), TimeZone, utcToLocalTimeOfDay)
-import Data.Time.LocalTime (TimeZone)
--- import Text.Printf (printf)
+import Data.Text (unpack)
+import Data.Time.LocalTime (TimeOfDay (..), TimeZone, utcToLocalTimeOfDay)
+import Text.Mustache ((~>), checkedSubstitute, compileTemplate, object)
 
 import PbMetar.Model.Common
--- import PbMetar.Model.Options
--- import PbMetar.Model.Temperature
+import PbMetar.Model.Options (Template (..))
 import PbMetar.Model.Weather
--- import PbMetar.Model.Wind
--- import PbMetar.Math (calculateWindChill)
+import PbMetar.Math (calculateWindChill, formatTimeValue)
 
 
-mkPolybarLabel :: TimeZone -> Weather Metric -> String
-mkPolybarLabel localZone weatherM = "foobar"
+mkOutput :: Template -> TimeZone -> Weather Metric -> Either String String
+mkOutput (Template templateString) localZone weatherM = do
+  -- Convert, extract and compute various things from the metric weather we have
+  let weatherI = convert weatherM :: Weather Imperial
+  let (_, (TimeOfDay localHour localMin _)) = utcToLocalTimeOfDay localZone $ timeUtc weatherI
+  let chillF = calculateWindChill weatherI
+  let chillC = convert chillF :: WindChill Metric
 
--- mkPolybarLabel :: TimeZone -> FontIndex -> ColorText -> Weather Metric -> String
--- mkPolybarLabel localZone (FontIndex fontIndex) colorText weatherM =
---   let weatherI = convert weatherM :: Weather Imperial
---       (_, (TimeOfDay localHour localMin _)) = utcToLocalTimeOfDay localZone $ timeUtc weatherI
---       (Wind windMph) = wind weatherI
---       (colorBegin, colorEnd) = mkColorFormatting colorText
---   in printf "%%{T%d}\xe586%%{T-} %s%02d:%02d%s %%{T%d}\xf2c9%%{T-} %s %%{T%d}\xf72e%%{T-} %s%.1fmph%s"
---         fontIndex colorBegin localHour localMin colorEnd
---         fontIndex (mkTempDisplay colorText weatherI)
---         fontIndex colorBegin windMph colorEnd
+  -- Marshall the complete set of weather values for mustache template substitution
+  let values = object
+        [ "station" ~> station weatherM
+        , "hour12" ~> (formatTimeValue $ mod localHour 12)
+        , "hour24" ~> formatTimeValue localHour
+        , "min" ~> localMin
+        , "tempC" ~> temperature weatherM
+        , "tempF" ~> temperature weatherI
+        , "windKph" ~> wind weatherM
+        , "windMph" ~> wind weatherI
+        , "hasChill" ~> hasChill chillF
+        , "chillC" ~> chillC
+        , "chillF" ~> chillF
+        ]
 
-
--- mkTempDisplay :: ColorText -> Weather Imperial -> String
--- mkTempDisplay colorText weatherI =
---   let (Temperature tempF) = temperature weatherI
---       (colorBegin, colorEnd) = mkColorFormatting colorText
---       windChillLabel = mkWindChillLabel $ calculateWindChill weatherI
---   in printf "%s%.0f°F%s%s" colorBegin tempF windChillLabel colorEnd
-
-
--- mkWindChillLabel :: WindChill Imperial -> String
--- mkWindChillLabel NoEffect = ""
--- mkWindChillLabel (WindChill (Temperature windChillF)) =
---   printf "/%.0f°F" windChillF
+  template <- either (Left . show) Right $ compileTemplate "user-template" templateString
+  unpack <$> (tupleToEither $ checkedSubstitute template values)
 
 
--- mkColorFormatting :: ColorText -> (String, String)
--- mkColorFormatting NoColorChange = ("", "")
--- mkColorFormatting (ColorText colText) = ( printf "%%{F%s}" colText, "%{F-}")
+-- Helper to make the result of mustache's checked* functions into a monadic error
+tupleToEither :: Show a => ([a], b) -> Either String b
+tupleToEither ([], b) = Right b
+tupleToEither (es, _) = Left . show $ es

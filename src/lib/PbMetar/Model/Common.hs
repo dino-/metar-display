@@ -1,6 +1,8 @@
 module PbMetar.Model.Common
   where
 
+import Text.Mustache (ToMustache, toMustache)
+
 
 data Imperial   -- Units like degrees Fahrenheit, miles per hour, for human-readability
 data Metric     -- Units like degrees Celsius, kilometers per hour, for human-readability
@@ -12,3 +14,6 @@ class Convert systemFrom systemTo where
 
 newtype Station = Station String
   deriving (Eq, Show)
+
+instance ToMustache Station where
+  toMustache (Station s) = toMustache s
