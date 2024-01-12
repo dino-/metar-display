@@ -15,7 +15,7 @@ import Text.Heredoc (here)
 import Text.Printf (printf)
 
 import PbMetar.Model.Common (Station (..))
-import PbMetar.Model.Options
+import PbMetar.Model.Options (Options (..), Template (..), intToVerbosity)
 
 
 parser :: Parser Options

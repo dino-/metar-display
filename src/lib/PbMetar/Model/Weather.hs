@@ -5,7 +5,7 @@ import Data.Text (pack)
 import Data.Time.LocalTime (TimeOfDay (..))
 import Text.Mustache (ToMustache, toMustache)
 
-import PbMetar.Model.Common
+import PbMetar.Model.Common (Convert, Imperial, Metric, Station (..), convert)
 import PbMetar.Model.Temperature
 import PbMetar.Model.Wind
 

@@ -4,9 +4,9 @@ module PbMetar.Math
 import Data.Text (Text, pack)
 import Text.Printf (printf)
 
-import PbMetar.Model.Common
+import PbMetar.Model.Common (Imperial)
 import PbMetar.Model.Temperature
-import PbMetar.Model.Weather
+import PbMetar.Model.Weather (Weather (..), WindChill (..))
 import PbMetar.Model.Wind
 
 

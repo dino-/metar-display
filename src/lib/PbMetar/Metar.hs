@@ -11,9 +11,9 @@ import Data.Monoid (First (..), getFirst)
 import Data.Time.LocalTime (TimeOfDay (..))
 import Text.Regex (matchRegex, mkRegex)
 
-import PbMetar.Model.Common
+import PbMetar.Model.Common (Meters, Metric, Nautical, Station (..), convert)
 import PbMetar.Model.Temperature
-import PbMetar.Model.Weather
+import PbMetar.Model.Weather (Weather (..))
 import PbMetar.Model.Wind
 
 

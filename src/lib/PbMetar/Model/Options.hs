@@ -1,7 +1,7 @@
 module PbMetar.Model.Options
   where
 
-import Data.Text
+import Data.Text (Text)
 import System.Log.Logger (Priority (..))
 
 import PbMetar.Model.Common (Station)
