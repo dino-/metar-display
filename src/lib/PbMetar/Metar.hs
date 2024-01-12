@@ -6,6 +6,7 @@ module PbMetar.Metar
   )
   where
 
+import Data.Maybe (listToMaybe)
 import Data.Monoid (First (..), getFirst)
 import Data.Time.LocalTime (TimeOfDay (..))
 import Text.Regex (matchRegex, mkRegex)
@@ -22,8 +23,12 @@ isolateMetarLine = Right . head . take 1 . drop 1 . lines
 
 -- KRDU 261451Z 09008KT 10SM FEW070 BKN095 BKN110 OVC250 14/08 A3019 RMK AO2 SLP220 T01390083 53003
 
-parse :: Station -> String -> Either String (Weather Metric)
-parse station metarString = do
+parse :: String -> Either String (Weather Metric)
+parse metarString = do
+  let parsedStation = matchRegex (mkRegex "^([A-Z]{4}) .*") metarString
+  station <- (maybe (Left $ "Unable to parse station from: " <> metarString) (Right . Station))
+    $ listToMaybe =<< parsedStation
+
   let parsedTime = matchRegex (mkRegex ".* [0-9]{2}([0-9]{2})([0-9]{2})Z .*") metarString
   time <- (maybe (Left $ "Unable to parse time from: " <> metarString) Right) $ timeFromStrings =<< parsedTime
 
