@@ -7,25 +7,26 @@ import Text.Mustache (ToMustache, toMustache)
 
 import PbMetar.Model.Common (Convert, Imperial, Metric, Station (..), convert)
 import PbMetar.Model.Temperature
-import PbMetar.Model.Wind
+import PbMetar.Model.Wind (Gust (..), Wind (..))
 
 
 data Weather system = Weather
   { station :: Station
   , timeUtc :: TimeOfDay
   , wind :: Wind system
+  , gust :: Gust system
   , temperature :: Temperature system
   }
   deriving (Eq, Show)
 
 
 instance Convert (Weather Imperial) (Weather Metric) where
-  convert (Weather station timeUtc wind temperature) =
-    Weather station timeUtc (convert wind) (convert temperature)
+  convert (Weather station timeUtc wind gust temperature) =
+    Weather station timeUtc (convert wind) (convert gust) (convert temperature)
 
 instance Convert (Weather Metric) (Weather Imperial) where
-  convert (Weather station timeUtc wind temperature) =
-    Weather station timeUtc (convert wind) (convert temperature)
+  convert (Weather station timeUtc wind gust temperature) =
+    Weather station timeUtc (convert wind) (convert gust) (convert temperature)
 
 
 data WindChill system

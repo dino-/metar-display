@@ -14,7 +14,7 @@ import Text.Regex (matchRegex, mkRegex)
 import PbMetar.Model.Common (Meters, Metric, Nautical, Station (..), convert)
 import PbMetar.Model.Temperature
 import PbMetar.Model.Weather (Weather (..))
-import PbMetar.Model.Wind
+import PbMetar.Model.Wind (Gust (..), Wind (..))
 
 
 isolateMetarLine :: String -> Either String String
@@ -34,18 +34,26 @@ parse metarString = do
 
   let mbWindKt = matchRegex (mkRegex ".* .{3}([0-9]{2,3})(G.*)?KT .*") metarString
   let mbWindMps = matchRegex (mkRegex ".* .{3}([0-9]{2,3})(G.*)?MPS .*") metarString
-  (conversionFunction, windValues) <- maybe (Left $ "Unable to parse wind from: " <> metarString) Right
+  (convertWind, windValues) <- maybe (Left $ "Unable to parse wind from: " <> metarString) Right
     $ getFirst . mconcat . map First $ zipWith (\fn wind -> return . (,) fn =<< wind)
         [convert . Wind @Nautical, convert . Wind @Meters, convert . Wind @Nautical]
         [mbWindKt,                 mbWindMps,              Just ["0"]              ]
-  let windKph = conversionFunction . read $ windValues !! 0
+  let windKph = convertWind . read $ windValues !! 0
+
+  let mbGustKt = matchRegex (mkRegex ".* .{3}[0-9]{2,3}G([0-9]{2,3})KT .*") metarString
+  let mbGustMps = matchRegex (mkRegex ".* .{3}[0-9]{2,3}G([0-9]{2,3})MPS .*") metarString
+  (convertGust, gustValues) <- maybe (Left $ "Unable to parse gust from: " <> metarString) Right
+    $ getFirst . mconcat . map First $ zipWith (\fn gust -> return . (,) fn =<< gust)
+        [convert . Gust . Wind @Nautical, convert . Gust . Wind @Meters, const NoGust]
+        [mbGustKt,                        mbGustMps,                     Just ["0"]  ]
+  let gustKph = convertGust . read $ gustValues !! 0
 
   let mbTempRmk = mkTempCelsius $ matchRegex (mkRegex ".* T([0-9]{1})([0-9]{3})[0-9]{4}.*") metarString
   let mbTemp = mkTempCelsius $ matchRegex (mkRegex ".* (M)?([0-9]{2,3})/M?[0-9]{2,3} .*") metarString
   tempC <- maybe (Left $ "Unable to parse temperature from: " <> metarString) Right
     $ getFirst . mconcat . map First $ [mbTempRmk, mbTemp]
 
-  pure $ Weather station time windKph tempC
+  pure $ Weather station time windKph gustKph tempC
 
 
 timeFromStrings :: [String] -> Maybe TimeOfDay

@@ -7,9 +7,10 @@ import Data.Text (unpack)
 import Data.Time.LocalTime (TimeOfDay (..), TimeZone, utcToLocalTimeOfDay)
 import Text.Mustache ((~>), checkedSubstitute, compileTemplate, object)
 
-import PbMetar.Model.Common
+import PbMetar.Model.Common (Imperial, Metric, convert)
 import PbMetar.Model.Options (Template (..))
-import PbMetar.Model.Weather
+import PbMetar.Model.Weather (Weather (..), WindChill (..), hasChill)
+import PbMetar.Model.Wind (hasGust)
 import PbMetar.Math (calculateWindChill, formatTimeValue)
 
 
@@ -24,13 +25,21 @@ mkOutput (Template templateString) localZone weatherM = do
   -- Marshall the complete set of weather values for mustache template substitution
   let values = object
         [ "station" ~> station weatherM
+
         , "hour12" ~> (formatTimeValue $ mod localHour 12)
         , "hour24" ~> formatTimeValue localHour
         , "min" ~> localMin
-        , "tempC" ~> temperature weatherM
-        , "tempF" ~> temperature weatherI
+
         , "windKph" ~> wind weatherM
         , "windMph" ~> wind weatherI
+
+        , "hasGust" ~> hasGust (gust weatherM)
+        , "gustKph" ~> gust weatherM
+        , "gustMph" ~> gust weatherI
+
+        , "tempC" ~> temperature weatherM
+        , "tempF" ~> temperature weatherI
+
         , "hasChill" ~> hasChill chillF
         , "chillC" ~> chillC
         , "chillF" ~> chillF

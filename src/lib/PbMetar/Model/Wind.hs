@@ -30,3 +30,40 @@ instance ToMustache (Wind Metric) where
 
 instance ToMustache (Wind Imperial) where
   toMustache (Wind windMph) = toMustache . pack $ printf "%.1f" windMph
+
+
+data Gust system
+  = Gust (Wind system)
+  | NoGust
+  deriving (Eq, Show)
+
+
+instance Convert (Gust Imperial) (Gust Metric) where
+  convert (Gust windMph) = Gust . convert $ windMph
+  convert NoGust = NoGust
+
+instance Convert (Gust Metric) (Gust Imperial) where
+  convert (Gust windKph) = Gust . convert $ windKph
+  convert NoGust = NoGust
+
+instance Convert (Gust Nautical) (Gust Metric) where
+  convert (Gust windKts) = Gust . convert $ windKts
+  convert NoGust = NoGust
+
+instance Convert (Gust Meters) (Gust Metric) where
+  convert (Gust windMps) = Gust . convert $ windMps
+  convert NoGust = NoGust
+
+
+instance ToMustache (Gust Imperial) where
+  toMustache (Gust windMph) = toMustache windMph
+  toMustache NoGust = toMustache . pack $ "N/A"
+
+instance ToMustache (Gust Metric) where
+  toMustache (Gust windKph) = toMustache windKph
+  toMustache NoGust = toMustache . pack $ "N/A"
+
+
+hasGust :: Gust system -> Bool
+hasGust (Gust _) = True
+hasGust NoGust = False

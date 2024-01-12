@@ -87,10 +87,13 @@ The template is a standard Mustache template where weather values will be substi
     hour12    Hour of observation 12-hour format              03
     hour24    Hour of observation 24-hour format              15
     min       Minute of observation                           47
-    tempC     Temperature in degrees Celsius                  11.3
-    tempF     Temperature in degrees Fahrenheit               56
     windKph   Wind speed in KPH                               11
     windMph   Wind speed in MPH                               6.9
+    hasGust   True if there are wind gusts (for use with {{#hasGust}}...{{/hasGust}} conditionals)
+    gustKph   Wind gust speed in KPH                          38
+    gustMph   Wind gust speed in MPH                          41.2
+    tempC     Temperature in degrees Celsius                  11.3
+    tempF     Temperature in degrees Fahrenheit               56
     hasChill  True if there is wind chill effect (for use with {{#hasChill}}...{{/hasChill}} conditionals)
     chillC    Wind chill temperature in degrees Celsius       2.7
     chillF    Wind chill temperature in degrees Fahrenheit    30
@@ -107,8 +110,8 @@ that. In your polybar config.ini
 
     ; Specifying your own template string
     ; command = "path/if/not/on/PATH/polybar-metar-weather KXYZ '{{station}}: {{tempF}}°F ({{hour24}})' 2>> ~/.xmonad/polybar-metar-weather.log"
-    ; A fancier template with Font Awesome glyphs and colored text!
-    ; command = "path/if/not/on/PATH/polybar-metar-weather KXYZ %%{T2}%%{T-} %%{F#f0c674}{{station}} {{hour24}}:{{min}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{tempF}}°F{{#hasChill}}/{{chillF}}°F{{/hasChill}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{windMph}}mph%%{F-}'' 2>> ~/.xmonad/polybar-metar-weather.log"
+    ; A fancier template with Font Awesome glyphs, colored text and conditional wind chill and wind gust display!
+    ; command = "path/if/not/on/PATH/polybar-metar-weather KXYZ '%%{T2}%%{T-} %%{F#f0c674}{{station}} {{hour24}}:{{min}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{tempF}}°F{{#hasChill}}/{{chillF}}°F{{/hasChill}}%%{F-}{{#hasGust}} %%{T2}%%{T-} %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}' 2>> ~/.xmonad/polybar-metar-weather.log"
 
     exec = ${self.command}
     click-left = ${self.command}

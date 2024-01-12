@@ -7,11 +7,11 @@ import Text.Printf (printf)
 import PbMetar.Model.Common (Imperial)
 import PbMetar.Model.Temperature
 import PbMetar.Model.Weather (Weather (..), WindChill (..))
-import PbMetar.Model.Wind
+import PbMetar.Model.Wind (Wind (..))
 
 
 calculateWindChill :: (Weather Imperial) -> WindChill Imperial
-calculateWindChill (Weather _ _ (Wind windMph) (Temperature tempF))
+calculateWindChill (Weather _ _ (Wind windMph) _ (Temperature tempF))
   | windMph < 3.0 = NoEffect
   | otherwise = WindChill windChillF
       where
