@@ -8,7 +8,7 @@ description: A utility to retrieve METAR weather info, parse it and construct
 author: Dino Morelli
 maintainer: dino@ui3.info
 copyright: 2023 Dino Morelli
-category: Unclassified
+category: Application, CLI, Command Line Tool, CommandLine, Console
 license: ISC
 license-file: LICENSE
 build-type: Simple
