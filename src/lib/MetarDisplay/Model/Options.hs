@@ -1,10 +1,10 @@
-module PbMetar.Model.Options
+module MetarDisplay.Model.Options
   where
 
 import Data.Text (Text)
 import System.Log.Logger (Priority (..))
 
-import PbMetar.Model.Common (Station)
+import MetarDisplay.Model.Common (Station)
 
 newtype Template = Template Text
   deriving Show

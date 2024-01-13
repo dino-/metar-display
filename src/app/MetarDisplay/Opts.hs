@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
 
-module PbMetar.Opts
+module MetarDisplay.Opts
    ( parseOpts
    )
    where
@@ -8,14 +8,14 @@ module PbMetar.Opts
 import Data.Char (toUpper)
 import Data.Version (showVersion)
 import Options.Applicative
-import Paths_polybar_metar_weather (version)
+import Paths_metar_display (version)
 import Prettyprinter (pretty)
 import System.Environment (getProgName)
 import Text.Heredoc (here)
 import Text.Printf (printf)
 
-import PbMetar.Model.Common (Station (..))
-import PbMetar.Model.Options (Options (..), Template (..), intToVerbosity)
+import MetarDisplay.Model.Common (Station (..))
+import MetarDisplay.Model.Options (Options (..), Template (..), intToVerbosity)
 
 
 parser :: Parser Options
@@ -70,7 +70,7 @@ the United States this chart will be helpful: https://cnrfc.noaa.gov/metar.php
 
 Once you have a station, try running it in a terminal
 
-    $ polybar-metar-weather KRDU
+    $ metar-display KRDU
 
 You should see output like this
 
@@ -106,12 +106,12 @@ that. In your polybar config.ini
     [module/weather]
     type = custom/script
 
-    command = "path/if/not/on/PATH/polybar-metar-weather KXYZ 2>> ~/.xmonad/polybar-metar-weather.log"
+    command = "path/if/not/on/PATH/metar-display KXYZ 2>> ~/.xmonad/metar-display.log"
 
     ; Specifying your own template string
-    ; command = "path/if/not/on/PATH/polybar-metar-weather KXYZ '{{station}}: {{tempF}}°F ({{hour24}})' 2>> ~/.xmonad/polybar-metar-weather.log"
+    ; command = "path/if/not/on/PATH/metar-display KXYZ '{{station}}: {{tempF}}°F ({{hour24}})' 2>> ~/.xmonad/metar-display.log"
     ; A fancier template with Font Awesome glyphs, colored text and conditional wind chill and wind gust display!
-    ; command = "path/if/not/on/PATH/polybar-metar-weather KXYZ '%%{T2}%%{T-} %%{F#f0c674}{{station}} {{hour24}}:{{min}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{tempF}}°F{{#hasChill}}/{{chillF}}°F{{/hasChill}}%%{F-}{{#hasGust}} %%{T2}%%{T-} %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}' 2>> ~/.xmonad/polybar-metar-weather.log"
+    ; command = "path/if/not/on/PATH/metar-display KXYZ '%%{T2}%%{T-} %%{F#f0c674}{{station}} {{hour24}}:{{min}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{tempF}}°F{{#hasChill}}/{{chillF}}°F{{/hasChill}}%%{F-}{{#hasGust}} %%{T2}%%{T-} %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}' 2>> ~/.xmonad/metar-display.log"
 
     exec = ${self.command}
     click-left = ${self.command}

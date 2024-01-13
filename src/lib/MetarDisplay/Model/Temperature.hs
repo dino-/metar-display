@@ -1,11 +1,11 @@
-module PbMetar.Model.Temperature
+module MetarDisplay.Model.Temperature
   where
 
 import Data.Text (pack)
 import Text.Mustache (ToMustache, toMustache)
 import Text.Printf (printf)
 
-import PbMetar.Model.Common
+import MetarDisplay.Model.Common
 
 
 newtype Temperature system = Temperature Double

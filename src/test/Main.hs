@@ -1,9 +1,9 @@
 import Data.Time.LocalTime (TimeOfDay (..))
-import PbMetar.Metar (parse)
-import PbMetar.Model.Common (Imperial, Metric, Nautical, Station (..), convert)
-import PbMetar.Model.Temperature
-import PbMetar.Model.Weather (Weather (..))
-import PbMetar.Model.Wind (Gust (..), Wind (..))
+import MetarDisplay.Metar (parse)
+import MetarDisplay.Model.Common (Imperial, Metric, Nautical, Station (..), convert)
+import MetarDisplay.Model.Temperature
+import MetarDisplay.Model.Weather (Weather (..))
+import MetarDisplay.Model.Wind (Gust (..), Wind (..))
 import Test.Tasty
 import Test.Tasty.HUnit
 

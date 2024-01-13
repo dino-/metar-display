@@ -1,4 +1,4 @@
-module PbMetar.Log
+module MetarDisplay.Log
   ( initLogging, lname, out
 
    -- Re-exported from System.Log
@@ -13,7 +13,7 @@ import System.Log.Handler (setFormatter)
 import System.Log.Handler.Simple (streamHandler)
 import System.Log.Logger
 
-import PbMetar.Model.Options (Verbosity (..))
+import MetarDisplay.Model.Options (Verbosity (..))
 
 
 lname :: String
@@ -43,5 +43,5 @@ initLogging verbosity = do
         <$> streamHandler stderr priority
         >>= updateGlobalLogger lname . addHandler
 
-  -- The logger for normal stdout output of this software, what polybar shows
+  -- The logger for normal stdout output of this software
   streamHandler stdout DEBUG >>= (updateGlobalLogger outputLoggerName . addHandler)

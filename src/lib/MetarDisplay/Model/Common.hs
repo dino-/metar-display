@@ -1,4 +1,4 @@
-module PbMetar.Model.Common
+module MetarDisplay.Model.Common
   where
 
 import Text.Mustache (ToMustache, toMustache)

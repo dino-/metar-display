@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeApplications #-}
 
-module PbMetar.Metar
+module MetarDisplay.Metar
   ( isolateMetarLine
   , parse
   )
@@ -11,10 +11,10 @@ import Data.Monoid (First (..), getFirst)
 import Data.Time.LocalTime (TimeOfDay (..))
 import Text.Regex (matchRegex, mkRegex)
 
-import PbMetar.Model.Common (Meters, Metric, Nautical, Station (..), convert)
-import PbMetar.Model.Temperature
-import PbMetar.Model.Weather (Weather (..))
-import PbMetar.Model.Wind (Gust (..), Wind (..))
+import MetarDisplay.Model.Common (Meters, Metric, Nautical, Station (..), convert)
+import MetarDisplay.Model.Temperature
+import MetarDisplay.Model.Weather (Weather (..))
+import MetarDisplay.Model.Wind (Gust (..), Wind (..))
 
 
 isolateMetarLine :: String -> Either String String

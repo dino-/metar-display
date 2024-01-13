@@ -1,4 +1,4 @@
-module PbMetar.Output
+module MetarDisplay.Output
   ( mkOutput
   )
   where
@@ -7,11 +7,11 @@ import Data.Text (unpack)
 import Data.Time.LocalTime (TimeOfDay (..), TimeZone, utcToLocalTimeOfDay)
 import Text.Mustache ((~>), checkedSubstitute, compileTemplate, object)
 
-import PbMetar.Model.Common (Imperial, Metric, convert)
-import PbMetar.Model.Options (Template (..))
-import PbMetar.Model.Weather (Weather (..), WindChill (..), hasChill)
-import PbMetar.Model.Wind (hasGust)
-import PbMetar.Math (calculateWindChill, formatTimeValue)
+import MetarDisplay.Model.Common (Imperial, Metric, convert)
+import MetarDisplay.Model.Options (Template (..))
+import MetarDisplay.Model.Weather (Weather (..), WindChill (..), hasChill)
+import MetarDisplay.Model.Wind (hasGust)
+import MetarDisplay.Math (calculateWindChill, formatTimeValue)
 
 
 mkOutput :: Template -> TimeZone -> Weather Metric -> Either String String

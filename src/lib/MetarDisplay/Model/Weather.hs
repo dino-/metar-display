@@ -1,13 +1,13 @@
-module PbMetar.Model.Weather
+module MetarDisplay.Model.Weather
   where
 
 import Data.Text (pack)
 import Data.Time.LocalTime (TimeOfDay (..))
 import Text.Mustache (ToMustache, toMustache)
 
-import PbMetar.Model.Common (Convert, Imperial, Metric, Station (..), convert)
-import PbMetar.Model.Temperature
-import PbMetar.Model.Wind (Gust (..), Wind (..))
+import MetarDisplay.Model.Common (Convert, Imperial, Metric, Station (..), convert)
+import MetarDisplay.Model.Temperature
+import MetarDisplay.Model.Wind (Gust (..), Wind (..))
 
 
 data Weather system = Weather

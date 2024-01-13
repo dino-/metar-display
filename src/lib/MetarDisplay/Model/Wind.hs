@@ -1,11 +1,11 @@
-module PbMetar.Model.Wind
+module MetarDisplay.Model.Wind
   where
 
 import Data.Text (pack)
 import Text.Mustache (ToMustache, toMustache)
 import Text.Printf (printf)
 
-import PbMetar.Model.Common (Convert, Imperial, Meters, Metric, Nautical, convert)
+import MetarDisplay.Model.Common (Convert, Imperial, Meters, Metric, Nautical, convert)
 
 
 newtype Wind system = Wind Double

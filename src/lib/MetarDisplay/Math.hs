@@ -1,13 +1,13 @@
-module PbMetar.Math
+module MetarDisplay.Math
   where
 
 import Data.Text (Text, pack)
 import Text.Printf (printf)
 
-import PbMetar.Model.Common (Imperial)
-import PbMetar.Model.Temperature
-import PbMetar.Model.Weather (Weather (..), WindChill (..))
-import PbMetar.Model.Wind (Wind (..))
+import MetarDisplay.Model.Common (Imperial)
+import MetarDisplay.Model.Temperature
+import MetarDisplay.Model.Weather (Weather (..), WindChill (..))
+import MetarDisplay.Model.Wind (Wind (..))
 
 
 calculateWindChill :: (Weather Imperial) -> WindChill Imperial

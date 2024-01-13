@@ -1,19 +1,19 @@
 import Data.Time.LocalTime (getCurrentTimeZone)
 import System.Exit (exitFailure, exitSuccess)
 
-import PbMetar.Curl (getMetar)
-import PbMetar.Log (criticalM, infoM, initLogging, lname, noticeM, out)
-import PbMetar.Metar (isolateMetarLine, parse)
-import PbMetar.Model.Options (Options (..))
-import PbMetar.Opts (parseOpts)
-import PbMetar.Output (mkOutput)
+import MetarDisplay.Curl (getMetar)
+import MetarDisplay.Log (criticalM, infoM, initLogging, lname, noticeM, out)
+import MetarDisplay.Metar (isolateMetarLine, parse)
+import MetarDisplay.Model.Options (Options (..))
+import MetarDisplay.Opts (parseOpts)
+import MetarDisplay.Output (mkOutput)
 
 
 main :: IO ()
 main = do
   opts <- parseOpts
   initLogging $ optVerbosity opts
-  infoM lname "polybar-metar-weather started"
+  infoM lname "metar-display started"
   curlResult <- getMetar $ optStation opts
   let eMetarString = isolateMetarLine =<< curlResult
   either (const $ pure ()) (noticeM lname) eMetarString
@@ -23,10 +23,10 @@ main = do
 
 
 exitOk :: String -> IO ()
-exitOk polybarLabel = do
-  infoM lname $ "stdout output string: " <> polybarLabel
-  out polybarLabel
-  infoM lname "polybar-metar-weather finished successfully"
+exitOk output = do
+  infoM lname $ "stdout output string: " <> output
+  out output
+  infoM lname "metar-display finished successfully"
   exitSuccess
 
 

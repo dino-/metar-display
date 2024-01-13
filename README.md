@@ -1,15 +1,15 @@
-# polybar-metar-weather
+# metar-display
 
 
 ## Synopsis
 
-Retrieve and parse METAR weather for Polybar
+Retrieve and parse METAR weather for display
 
 
 ## Description
 
-A utility to retrieve METAR weather info, parse it and construct monitor output
-for polybar. Uses FontAwesome glyphs.
+A utility to retrieve METAR weather info, parse it and construct human readable
+output.
 
 
 ## Installation
@@ -17,21 +17,22 @@ for polybar. Uses FontAwesome glyphs.
 It's recommended to install a pre-compiled Linux binary either from your
 distro's packaging system or from a release on Github but if you like:
 
-    $ cd polybar-metar-weather
+    $ cd metar-display
     $ stack build
     $ stack install
 
 Which will install it in `~/.local/bin`
 
-Details regarding integration with polybar's config are in the usage
+Instructions for use including details regarding integration with polybar's
+config are in the usage.
 
-    $ polybar-metar-weather --help
+    $ metar-display --help
 
 
 ## Getting source
 
 Source code is available from github at the
-[polybar-metar-weather](https://github.com/dino-/polybar-metar-weather) project
+[metar-display](https://github.com/dino-/metar-display) project
 page.
 
 

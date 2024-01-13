@@ -1,4 +1,4 @@
-module PbMetar.Curl
+module MetarDisplay.Curl
   ( getMetar
   )
   where
@@ -6,7 +6,7 @@ module PbMetar.Curl
 import Network.Curl (CurlCode (CurlOK), curlGetString)
 import Text.Printf (printf)
 
-import PbMetar.Model.Common (Station (..))
+import MetarDisplay.Model.Common (Station (..))
 
 
 getMetar :: Station -> IO (Either String String)
