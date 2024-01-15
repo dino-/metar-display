@@ -65,6 +65,7 @@ library
     MetarDisplay.Math
     MetarDisplay.Metar
     MetarDisplay.Model.Common
+    MetarDisplay.Model.Humidity
     MetarDisplay.Model.Options
     MetarDisplay.Model.Temperature
     MetarDisplay.Model.Weather

@@ -16,17 +16,18 @@ data Weather system = Weather
   , wind :: Wind system
   , gust :: Gust system
   , temperature :: Temperature system
+  , dewPoint :: Temperature system
   }
   deriving (Eq, Show)
 
 
 instance Convert (Weather Imperial) (Weather Metric) where
-  convert (Weather station timeUtc wind gust temperature) =
-    Weather station timeUtc (convert wind) (convert gust) (convert temperature)
+  convert (Weather station timeUtc wind gust temperature dewPoint) =
+    Weather station timeUtc (convert wind) (convert gust) (convert temperature) (convert dewPoint)
 
 instance Convert (Weather Metric) (Weather Imperial) where
-  convert (Weather station timeUtc wind gust temperature) =
-    Weather station timeUtc (convert wind) (convert gust) (convert temperature)
+  convert (Weather station timeUtc wind gust temperature dewPoint) =
+    Weather station timeUtc (convert wind) (convert gust) (convert temperature) (convert dewPoint)
 
 
 data WindChill system

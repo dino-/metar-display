@@ -53,7 +53,12 @@ parse metarString = do
   tempC <- maybe (Left $ "Unable to parse temperature from: " <> metarString) Right
     $ getFirst . mconcat . map First $ [mbTempRmk, mbTemp]
 
-  pure $ Weather station time windKph gustKph tempC
+  let mbDewRmk = mkTempCelsius $ matchRegex (mkRegex ".* T[0-9]{4}([0-9]{1})([0-9]{3}).*") metarString
+  let mbDew = mkTempCelsius $ matchRegex (mkRegex ".* M?[0-9]{2,3}/(M)?([0-9]{2,3}) .*") metarString
+  dewPointC <- maybe (Left $ "Unable to parse dewpoint from: " <> metarString) Right
+    $ getFirst . mconcat . map First $ [mbDewRmk, mbDew]
+
+  pure $ Weather station time windKph gustKph tempC dewPointC
 
 
 timeFromStrings :: [String] -> Maybe TimeOfDay

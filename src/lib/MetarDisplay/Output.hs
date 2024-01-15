@@ -11,7 +11,7 @@ import MetarDisplay.Model.Common (Imperial, Metric, convert)
 import MetarDisplay.Model.Options (Template (..))
 import MetarDisplay.Model.Weather (Weather (..), WindChill (..), hasChill)
 import MetarDisplay.Model.Wind (hasGust)
-import MetarDisplay.Math (calculateWindChill, formatTimeValue)
+import MetarDisplay.Math (calculateRelativeHumidity, calculateWindChill, formatTimeValue)
 
 
 mkOutput :: Template -> TimeZone -> Weather Metric -> Either String String
@@ -20,7 +20,6 @@ mkOutput (Template templateString) localZone weatherM = do
   let weatherI = convert weatherM :: Weather Imperial
   let (_, (TimeOfDay localHour localMin _)) = utcToLocalTimeOfDay localZone $ timeUtc weatherI
   let chillF = calculateWindChill weatherI
-  let chillC = convert chillF :: WindChill Metric
 
   -- Marshall the complete set of weather values for mustache template substitution
   let values = object
@@ -41,8 +40,13 @@ mkOutput (Template templateString) localZone weatherM = do
         , "tempF" ~> temperature weatherI
 
         , "hasChill" ~> hasChill chillF
-        , "chillC" ~> chillC
+        , "chillC" ~> (convert chillF :: WindChill Metric)
         , "chillF" ~> chillF
+
+        , "dewPointC" ~> dewPoint weatherM
+        , "dewPointF" ~> dewPoint weatherI
+
+        , "rh" ~> calculateRelativeHumidity (temperature weatherM) (dewPoint weatherM)
         ]
 
   template <- either (Left . show) Right $ compileTemplate "user-template" templateString

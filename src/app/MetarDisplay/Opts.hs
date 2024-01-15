@@ -81,22 +81,25 @@ TEMPLATE
 
 The template is a standard Mustache template where weather values will be substituted for these field names:
 
-    field     description                                     example
+    field     description                                       example
     -------------------------------------------------------------------
-    station   Station code                                    KRDU
-    hour12    Hour of observation 12-hour format              03
-    hour24    Hour of observation 24-hour format              15
-    min       Minute of observation                           47
-    windKph   Wind speed in KPH                               11
-    windMph   Wind speed in MPH                               6.9
-    hasGust   True if there are wind gusts (for use with {{#hasGust}}...{{/hasGust}} conditionals)
-    gustKph   Wind gust speed in KPH                          38
-    gustMph   Wind gust speed in MPH                          41.2
-    tempC     Temperature in degrees Celsius                  11.3
-    tempF     Temperature in degrees Fahrenheit               56
-    hasChill  True if there is wind chill effect (for use with {{#hasChill}}...{{/hasChill}} conditionals)
-    chillC    Wind chill temperature in degrees Celsius       2.7
-    chillF    Wind chill temperature in degrees Fahrenheit    30
+    station     Station code                                    KRDU
+    hour12      Hour of observation 12-hour format              03
+    hour24      Hour of observation 24-hour format              15
+    min         Minute of observation                           47
+    windKph     Wind speed in KPH                               11
+    windMph     Wind speed in MPH                               6.9
+    hasGust     True if there are wind gusts (for use with {{#hasGust}}...{{/hasGust}} conditionals)
+    gustKph     Wind gust speed in KPH                          38
+    gustMph     Wind gust speed in MPH                          41.2
+    tempC       Temperature in degrees Celsius                  11.3
+    tempF       Temperature in degrees Fahrenheit               56
+    hasChill    True if there is wind chill effect (for use with {{#hasChill}}...{{/hasChill}} conditionals)
+    chillC      Wind chill temperature in degrees Celsius       2.7
+    chillF      Wind chill temperature in degrees Fahrenheit    30
+    dewPointC   Dewpoint temperature in degrees Celsius         -2.7
+    dewPointF   Dewpoint temperature in degrees Fahrenheit      28
+    rh          Relative humidity as a perentage                65
 
 INTEGRATION WITH POLYBAR
 
