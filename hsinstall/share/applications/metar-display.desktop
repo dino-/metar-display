@@ -1,0 +1,8 @@
+[Desktop Entry]
+Categories=Monitor;ConsoleOnly;
+Type=Application
+Icon=metar-display
+Exec=metar-display
+Name=metar-display
+Terminal=true
+
