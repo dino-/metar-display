@@ -106,12 +106,10 @@ that. In your polybar config.ini
     [module/weather]
     type = custom/script
 
-    command = "path/if/not/on/PATH/metar-display KXYZ 2>> ~/.xmonad/metar-display.log"
+    ; When configuring the display template, you may not need font switching notation (%%{T2}...%%{T-}) if there's only one symbol font, polybar can often figure it out.
 
-    ; Specifying your own template string
-    ; command = "path/if/not/on/PATH/metar-display KXYZ '{{station}}: {{tempF}}°F ({{hour24}})' 2>> ~/.xmonad/metar-display.log"
-    ; A fancier template with Font Awesome glyphs, colored text and conditional wind chill and wind gust display!
-    ; command = "path/if/not/on/PATH/metar-display KXYZ '%%{T2}%%{T-} %%{F#f0c674}{{station}} {{hour24}}:{{min}}%%{F-} %%{T2}%%{T-} %%{F#f0c674}{{tempF}}°F{{#hasChill}}/{{chillF}}°F{{/hasChill}}%%{F-}{{#hasGust}} %%{T2}%%{T-} %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}' 2>> ~/.xmonad/metar-display.log"
+    ; Wind grouped together with wind chill temp. Also only showing obs hour, not minute
+    command = "path/if/not/on/PATH/metar-display KRDU ' %%{F#f0c674}{{station}} ({{hour24}})%%{F-}  %%{F#f0c674}{{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}%%{F-}{{#hasGust}}  %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}' 2>> ~/.xmonad/metar-display.log"
 
     exec = ${self.command}
     click-left = ${self.command}
