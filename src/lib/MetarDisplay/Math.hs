@@ -26,4 +26,4 @@ formatTimeValue val = pack $ printf "%02d" val
 
 calculateRelativeHumidity :: Temperature system -> Temperature system -> RelativeHumidity
 calculateRelativeHumidity (Temperature tempC) (Temperature dewPointC) =
-  RelativeHumidity $ ((5.0 * tempC) - (5.0 * dewPointC) - 100) * (negate 1.0)
+  RelativeHumidity $ negate $ (5.0 * tempC) - (5.0 * dewPointC) - 100
