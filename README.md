@@ -11,6 +11,12 @@ Retrieve and parse METAR weather for display
 A utility to retrieve METAR weather info, parse it and construct human readable
 output.
 
+Sample output when used with polybar, showing station, hour of observation,
+temperature, wind chill temperature and wind speed, wind gust speed. And
+including Font Awesome glyphs.
+
+<img src='doc/metar-display_sample-output-01.png' />
+
 
 ## Installation
 
