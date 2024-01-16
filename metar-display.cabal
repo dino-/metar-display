@@ -91,10 +91,10 @@ executable metar-display
     src/app
   build-depends:
       base >=3 && <5
+    , ansi-wl-pprint
     , heredoc
     , metar-display
     , optparse-applicative
-    , prettyprinter
 
 test-suite test-suite
   import: lang

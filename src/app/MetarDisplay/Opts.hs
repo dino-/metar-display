@@ -9,9 +9,9 @@ import Data.Char (toUpper)
 import Data.Version (showVersion)
 import Options.Applicative
 import Paths_metar_display (version)
-import Prettyprinter (pretty)
 import System.Environment (getProgName)
 import Text.Heredoc (here)
+import Text.PrettyPrint.ANSI.Leijen (string)
 import Text.Printf (printf)
 
 import MetarDisplay.Model.Common (Station (..))
@@ -62,7 +62,7 @@ parseOpts = do
 
 
 footer' :: InfoMod a
-footer' = footerDoc . Just . pretty $ (printf content (showVersion version) :: String)
+footer' = footerDoc . Just . string $ (printf content (showVersion version) :: String)
   where content = [here|STATION
 
 You will need a METAR observation station identifier to get weather info. For
