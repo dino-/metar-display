@@ -14,9 +14,13 @@ license-file: LICENSE
 build-type: Simple
 extra-source-files:
   CHANGELOG.md
+  doc/metar-display_sample-output-01.png
   .gitignore
+  hsinstall/share/applications/metar-display.desktop
+  hsinstall/share/icons/hicolor/scalable/apps/metar-display.svg
   README.md
   stack.yaml
+  stack.yaml.lock
 
 source-repository head
   type: git
