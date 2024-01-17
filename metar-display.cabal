@@ -85,8 +85,10 @@ executable metar-display
   import: lang
   main-is: Main.hs
   other-modules:
-    Paths_metar_display
     MetarDisplay.Opts
+    Paths_metar_display
+  autogen-modules:
+    Paths_metar_display
   hs-source-dirs:
     src/app
   build-depends:
