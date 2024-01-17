@@ -1,3 +1,3 @@
-1.0 (YYYY-MM-DD)
+1.0 (2024-01-15)
 
   * Initial release
