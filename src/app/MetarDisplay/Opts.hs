@@ -65,8 +65,7 @@ footer' :: InfoMod a
 footer' = footerDoc . Just . string $ (printf content (showVersion version) :: String)
   where content = [here|STATION
 
-You will need a METAR observation station identifier to get weather info. For
-the United States this chart will be helpful: https://cnrfc.noaa.gov/metar.php
+You will need a METAR observation station identifier to get weather info. For the United States this chart will be helpful: https://cnrfc.noaa.gov/metar.php
 
 Once you have a station, try running it in a terminal
 
@@ -79,7 +78,7 @@ You should see output like this
 
 TEMPLATE
 
-The template is a standard Mustache template where weather values will be substituted for these field names:
+The template is in Mustache format with these weather value fields available:
 
     field     description                                       example
     -------------------------------------------------------------------
@@ -101,17 +100,27 @@ The template is a standard Mustache template where weather values will be substi
     dewPointF   Dewpoint temperature in degrees Fahrenheit      28
     rh          Relative humidity as a perentage                65
 
+Default template
+
+    {{station}}: {{tempC}}°C ({{hour12}})
+
+A template with conditional wind chill and wind gusts
+
+    {{station}} ({{hour24}}): {{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}{{#hasGust}} gust: {{gustMph}}mph{{/hasGust}}
+
+The same template with Font Awesome icons and colored text (you might use this with polybar, see below)
+
+     %%{F#f0c674}{{station}} ({{hour24}})%%{F-}  %%{F#f0c674}{{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}%%{F-}{{#hasGust}}  %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}
+
 INTEGRATION WITH POLYBAR
 
-The output of this program can be used with polybar, here's how to configure
-that. In your polybar config.ini
+The output of this program can be used with polybar, here's how to configure that. In your polybar config.ini
 
     [module/weather]
     type = custom/script
 
     ; When configuring the display template, you may not need font switching notation (%%{T2}...%%{T-}) if there's only one symbol font, polybar can often figure it out.
 
-    ; Wind grouped together with wind chill temp. Also only showing obs hour, not minute
     command = "path/if/not/on/PATH/metar-display KRDU ' %%{F#f0c674}{{station}} ({{hour24}})%%{F-}  %%{F#f0c674}{{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}%%{F-}{{#hasGust}}  %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}' 2>> ~/.xmonad/metar-display.log"
 
     exec = ${self.command}
@@ -122,14 +131,12 @@ that. In your polybar config.ini
 
 Note the `click-left` definition, which will re-run the module immediately.
 
-Here's an example of bringing Font Awesome into your polybar, if you don't
-already have it (in the [bar/YOURBARNAME] section):
-
-    font-1 = Font Awesome 6 Free,Font Awesome 6 Free Solid:style=Solid:size=16;4
-
 And then include the weather module in one of your bar sections
 
     modules-right = ... weather ...
+
+Here's an example of bringing Font Awesome into your polybar, if you don't already have it (in the [bar/YOURBARNAME] section):
+    font-1 = Font Awesome 6 Free,Font Awesome 6 Free Solid:style=Solid:size=16;4
 
 
 Version %s  Dino Morelli <dino@ui3.info>|]
