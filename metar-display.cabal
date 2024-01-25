@@ -1,7 +1,7 @@
 cabal-version: 2.2
 
 name: metar-display
-version: 1.0
+version: 1.1
 synopsis: Retrieve and parse METAR weather for display
 description: A utility to retrieve METAR weather info, parse it and construct
   human readable output.
