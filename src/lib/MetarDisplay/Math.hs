@@ -13,11 +13,13 @@ import MetarDisplay.Model.Wind (Wind (..))
 
 calculateWindChill :: (Weather Imperial) -> WindChill Imperial
 calculateWindChill (Weather _ _ (Wind windMph) _ (Temperature tempF) _)
-  | windMph < 3.0 = NoEffect
-  | otherwise = WindChill windChillF
-      where
-        exp' = 0.16 :: Double
-        windChillF = Temperature $ 34.74 + (0.6215 * tempF) - (35.75 * (windMph ** exp')) + (0.4275 * tempF * (windMph ** exp'))
+  | (windMph < 3.0) || (chillF >= tempF) = NoEffect
+  | otherwise = WindChill $ Temperature chillF
+  where
+    exp' = 0.16 :: Double
+    chillF = 34.74 + (0.6215 * tempF)
+      - (35.75 * (windMph ** exp'))
+      + (0.4275 * tempF * (windMph ** exp'))
 
 
 formatTimeValue :: Int -> Text
