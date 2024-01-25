@@ -2,8 +2,8 @@ module MetarDisplay.Log
   ( initLogging, lname, out
 
    -- Re-exported from System.Log
-  , debugM, infoM, noticeM, warningM, errorM , criticalM, alertM, emergencyM
   , Priority (..)
+  , debugM, infoM, noticeM, warningM, errorM , criticalM, alertM, emergencyM
   )
    where
 
