@@ -12,7 +12,7 @@ import MetarDisplay.Output (mkOutput)
 main :: IO ()
 main = do
   opts <- parseOpts
-  initLogging $ optVerbosity opts
+  initLogging (optLogDate opts) (optVerbosity opts)
   infoM lname "metar-display started"
   curlResult <- getMetar $ optStation opts
   let eMetarString = isolateMetarLine =<< curlResult

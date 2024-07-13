@@ -15,7 +15,7 @@ import Text.PrettyPrint.ANSI.Leijen (string)
 import Text.Printf (printf)
 
 import MetarDisplay.Model.Common (Station (..))
-import MetarDisplay.Model.Options (Options (..), Template (..), intToVerbosity)
+import MetarDisplay.Model.Options (LogDate (..), Options (..), Template (..), intToVerbosity)
 
 
 parser :: Parser Options
@@ -27,6 +27,12 @@ parser = Options
         <> help "Verbosity level. 0=quiet, 1=warnings/errors, 2=normal messages, 3=more info, 4=debug"
         <> showDefault
         <> value 2
+        )
+      )
+  <*> ( LogDate . not <$> switch
+        (  long "no-date"
+        <> short 'D'
+        <> help "Do not add date/time to log messages, useful when logging to systemd"
         )
       )
   <*> ( Station . map toUpper <$> strArgument

@@ -21,8 +21,12 @@ intToVerbosity 2 = Verbose NOTICE
 intToVerbosity 3 = Verbose INFO
 intToVerbosity _ = Verbose DEBUG
 
+newtype LogDate = LogDate Bool
+  deriving Show
+
 data Options = Options
   { optVerbosity :: Verbosity
+  , optLogDate :: LogDate
   , optStation :: Station
   , optTemplate :: Template
   }

@@ -13,7 +13,7 @@ import System.Log.Handler (setFormatter)
 import System.Log.Handler.Simple (streamHandler)
 import System.Log.Logger
 
-import MetarDisplay.Model.Options (Verbosity (..))
+import MetarDisplay.Model.Options (LogDate (..), Verbosity (..))
 
 
 lname :: String
@@ -28,18 +28,22 @@ out :: String -> IO ()
 out = infoM outputLoggerName
 
 
-initLogging :: Verbosity -> IO ()
-initLogging verbosity = do
+initLogging :: LogDate -> Verbosity -> IO ()
+initLogging (LogDate logDate) verbosity = do
   -- Remove the root logger's default handler that writes every
   -- message to stderr!
   updateGlobalLogger rootLoggerName removeHandler
   updateGlobalLogger rootLoggerName $ setLevel DEBUG
 
+  let formatString = if logDate
+        then "[$time : $prio] $msg"
+        else "[$prio] $msg"
+
   -- The logger for the actual log of this software, goes to stderr
   case verbosity of
     Quiet -> pure ()
     (Verbose priority) ->
-      (flip setFormatter $ simpleLogFormatter "[$time : $prio] $msg")
+      (flip setFormatter $ simpleLogFormatter formatString)
         <$> streamHandler stderr priority
         >>= updateGlobalLogger lname . addHandler
 
