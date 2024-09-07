@@ -17,7 +17,7 @@ getMetar (Station station) = do
   infoM lname $ "curl URL: " <> url
   curlResponse <- curlGetString url []
   infoM lname $ "raw curl response: " <> show curlResponse
-  resultToEither <$> curlGetString url []
+  pure $ resultToEither curlResponse
 
 
 resultToEither :: (CurlCode, String) -> Either String String
