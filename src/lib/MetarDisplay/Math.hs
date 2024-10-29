@@ -1,8 +1,8 @@
 module MetarDisplay.Math
   where
 
-import Data.Text (Text, pack)
-import Text.Printf (printf)
+import Data.Text (Text)
+import Formatting (left, sformat)
 
 import MetarDisplay.Model.Common (Imperial)
 import MetarDisplay.Model.Humidity
@@ -23,7 +23,7 @@ calculateWindChill (Weather _ _ (Wind windMph) _ (Temperature tempF) _)
 
 
 formatTimeValue :: Int -> Text
-formatTimeValue val = pack $ printf "%02d" val
+formatTimeValue val = sformat (left 2 '0') val
 
 
 calculateRelativeHumidity :: Temperature system -> Temperature system -> RelativeHumidity

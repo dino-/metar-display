@@ -2,8 +2,8 @@ module MetarDisplay.Model.Wind
   where
 
 import Data.Text (pack)
+import Formatting (fixed, format)
 import Text.Mustache (ToMustache, toMustache)
-import Text.Printf (printf)
 
 import MetarDisplay.Model.Common (Convert, Imperial, Meters, Metric, Nautical, convert)
 
@@ -26,10 +26,10 @@ instance Convert (Wind Meters) (Wind Metric) where
 
 
 instance ToMustache (Wind Metric) where
-  toMustache (Wind windKph) = toMustache . pack $ printf "%.0f" windKph
+  toMustache (Wind windKph) = toMustache $ format (fixed 0) windKph
 
 instance ToMustache (Wind Imperial) where
-  toMustache (Wind windMph) = toMustache . pack $ printf "%.1f" windMph
+  toMustache (Wind windMph) = toMustache $ format (fixed 1) windMph
 
 
 data Gust system

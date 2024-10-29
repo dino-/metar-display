@@ -1,9 +1,8 @@
 module MetarDisplay.Model.Temperature
   where
 
-import Data.Text (pack)
+import Formatting (fixed, format)
 import Text.Mustache (ToMustache, toMustache)
-import Text.Printf (printf)
 
 import MetarDisplay.Model.Common
 
@@ -20,7 +19,7 @@ instance Convert (Temperature Imperial) (Temperature Metric) where
 
 
 instance ToMustache (Temperature Metric) where
-  toMustache (Temperature tempC) = toMustache . pack $ printf "%.1f" tempC
+  toMustache (Temperature tempC) = toMustache $ format (fixed 1) tempC
 
 instance ToMustache (Temperature Imperial) where
-  toMustache (Temperature tempF) = toMustache . pack $ printf "%.0f" tempF
+  toMustache (Temperature tempF) = toMustache $ format (fixed 0) tempF

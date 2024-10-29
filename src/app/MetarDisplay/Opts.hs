@@ -7,12 +7,13 @@ module MetarDisplay.Opts
 
 import Data.Char (toUpper)
 import Data.Version (showVersion)
+import Formatting ((%+), format, formatToString)
+import Formatting.ShortFormatters (s)
 import Options.Applicative
 import Paths_metar_display (version)
+import Prettyprinter (pretty)
 import System.Environment (getProgName)
 import Text.Heredoc (here)
-import Text.PrettyPrint.ANSI.Leijen (string)
-import Text.Printf (printf)
 
 import MetarDisplay.Model.Common (Station (..))
 import MetarDisplay.Model.Options (LogDate (..), Options (..), Template (..), intToVerbosity)
@@ -51,7 +52,7 @@ parser = Options
 
 versionHelper :: String -> Parser (a -> a)
 versionHelper progName =
-  infoOption (printf "%s %s" progName (showVersion version)) $ mconcat
+  infoOption (formatToString (s %+ s) progName (showVersion version)) $ mconcat
   [ long "version"
   , help "Show version information"
   , hidden
@@ -62,13 +63,13 @@ parseOpts :: IO Options
 parseOpts = do
   pn <- getProgName
   execParser $ info (parser <**> helper <**> versionHelper pn)
-    (  header (printf "%s - Retrieve METAR weather, decode it and build customizable output of the data" pn)
+    (  header (formatToString (s %+ "- Retrieve METAR weather, decode it and build customizable output of the data") pn)
     <> footer'
     )
 
 
 footer' :: InfoMod a
-footer' = footerDoc . Just . string $ (printf content (showVersion version) :: String)
+footer' = footerDoc . Just . pretty . format content . showVersion $ version
   where content = [here|STATION
 
 You will need a METAR observation station identifier to get weather info. For the United States this chart will be helpful: https://cnrfc.noaa.gov/metar.php
@@ -116,7 +117,7 @@ A template with conditional wind chill and wind gusts
 
 The same template with Font Awesome icons and colored text (you might use this with polybar, see below)
 
-     %%{F#f0c674}{{station}} ({{hour24}})%%{F-}  %%{F#f0c674}{{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}%%{F-}{{#hasGust}}  %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}
+     %{F#f0c674}{{station}} ({{hour24}})%{F-}  %{F#f0c674}{{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}%{F-}{{#hasGust}}  %{F#f0c674}{{gustMph}}mph%{F-}{{/hasGust}}
 
 INTEGRATION WITH POLYBAR
 
@@ -125,9 +126,9 @@ The output of this program can be used with polybar, here's how to configure tha
     [module/weather]
     type = custom/script
 
-    ; When configuring the display template, you may not need font switching notation (%%{T2}...%%{T-}) if there's only one symbol font, polybar can often figure it out.
+    ; When configuring the display template, you may not need font switching notation (%{T2}...%{T-}) if there's only one symbol font, polybar can often figure it out.
 
-    command = "path/if/not/on/PATH/metar-display KRDU ' %%{F#f0c674}{{station}} ({{hour24}})%%{F-}  %%{F#f0c674}{{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}%%{F-}{{#hasGust}}  %%{F#f0c674}{{gustMph}}mph%%{F-}{{/hasGust}}' 2>> ~/.xmonad/metar-display.log"
+    command = "path/if/not/on/PATH/metar-display KRDU ' %{F#f0c674}{{station}} ({{hour24}})%{F-}  %{F#f0c674}{{tempF}}°F{{#hasChill}} ({{chillF}}°F {{windMph}}mph){{/hasChill}}%{F-}{{#hasGust}}  %{F#f0c674}{{gustMph}}mph%{F-}{{/hasGust}}' 2>> ~/.xmonad/metar-display.log"
 
     exec = ${self.command}
     click-left = ${self.command}
@@ -142,7 +143,8 @@ And then include the weather module in one of your bar sections
     modules-right = ... weather ...
 
 Here's an example of bringing Font Awesome into your polybar, if you don't already have it (in the [bar/YOURBARNAME] section):
+
     font-1 = Font Awesome 6 Free,Font Awesome 6 Free Solid:style=Solid:size=16;4
 
 
-Version %s  Dino Morelli <dino@ui3.info>|]
+Version|] %+ s %+ " Dino Morelli <dino@ui3.info>"

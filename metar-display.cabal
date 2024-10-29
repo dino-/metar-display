@@ -59,7 +59,9 @@ common lang
     -Wpartial-fields
     -Wredundant-constraints
   build-depends:
-      time
+      base >=3 && <5
+    , formatting
+    , time
 
 library
   import: lang
@@ -78,8 +80,7 @@ library
   hs-source-dirs:
     src/lib
   build-depends:
-      base >=3 && <5
-    , curl
+      curl
     , filepath
     , hslogger
     , mustache
@@ -97,11 +98,10 @@ executable metar-display
   hs-source-dirs:
     src/app
   build-depends:
-      base >=3 && <5
-    , ansi-wl-pprint
-    , heredoc
+      heredoc
     , metar-display
     , optparse-applicative
+    , prettyprinter
 
 test-suite test-suite
   import: lang
@@ -111,7 +111,6 @@ test-suite test-suite
     src/test
   ghc-options: -rtsopts -threaded -with-rtsopts=-N
   build-depends:
-      base >=3 && <5
-    , metar-display
+      metar-display
     , tasty
     , tasty-hunit
