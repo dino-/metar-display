@@ -3,4 +3,5 @@ snapshot: lts-22.6
 packages:
 - .
 
-# extra-deps: []
+extra-deps:
+- co-log-simple-1.1.0

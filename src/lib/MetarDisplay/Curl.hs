@@ -3,20 +3,22 @@ module MetarDisplay.Curl
   )
   where
 
+import Colog.Simple (logInfo)
+import Data.Text (pack)
 import Network.Curl (CurlCode (CurlOK), curlGetString)
 import System.FilePath ((</>), (<.>))
 
-import MetarDisplay.Log (infoM, lname)
 import MetarDisplay.Model.Common (Station (..))
+import MetarDisplay.Monad (App, liftIO)
 
 
-getMetar :: Station -> IO (Either String String)
+getMetar :: Station -> App (Either String String)
 getMetar (Station station) = do
   let urlPrefix = "ftp://tgftp.nws.noaa.gov/data/observations/metar/stations" :: String
   let url = urlPrefix </> station <.> "TXT"
-  infoM lname $ "curl URL: " <> url
-  curlResponse <- curlGetString url []
-  infoM lname $ "raw curl response: " <> show curlResponse
+  logInfo . pack $ "curl URL: " <> url
+  curlResponse <- liftIO $ curlGetString url []
+  logInfo . pack $ "raw curl response: " <> show curlResponse
   pure $ resultToEither curlResponse
 
 

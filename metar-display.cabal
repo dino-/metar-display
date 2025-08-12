@@ -47,6 +47,7 @@ common lang
     NamedFieldPuns
     NumericUnderscores
     OverloadedStrings
+    ImportQualifiedPost
     ScopedTypeVariables
     StandaloneDeriving
     TupleSections
@@ -67,7 +68,6 @@ library
   import: lang
   exposed-modules:
     MetarDisplay.Curl
-    MetarDisplay.Log
     MetarDisplay.Math
     MetarDisplay.Metar
     MetarDisplay.Model.Common
@@ -76,13 +76,16 @@ library
     MetarDisplay.Model.Temperature
     MetarDisplay.Model.Weather
     MetarDisplay.Model.Wind
+    MetarDisplay.Monad
     MetarDisplay.Output
   hs-source-dirs:
     src/lib
   build-depends:
-      curl
+      co-log
+    , co-log-simple
+    , curl
     , filepath
-    , hslogger
+    , mtl
     , mustache
     , regex-compat
     , text
@@ -98,10 +101,12 @@ executable metar-display
   hs-source-dirs:
     src/app
   build-depends:
-      heredoc
+      co-log-simple
+    , heredoc
     , metar-display
     , optparse-applicative
     , prettyprinter
+    , text
 
 test-suite test-suite
   import: lang
